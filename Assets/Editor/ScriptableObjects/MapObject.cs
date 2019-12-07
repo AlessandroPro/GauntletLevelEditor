@@ -6,4 +6,5 @@ public class MapObject : ScriptableObject
 {
     public string objectName = "MapObject";
     public Sprite mainSprite;
+    public string prefabGuid;
 }

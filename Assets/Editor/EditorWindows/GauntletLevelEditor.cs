@@ -43,6 +43,12 @@ public class GauntletLevelEditor : EditorWindow
 
     TileMap tileMap;
 
+    ObjectField gameData;
+    ObjectField levelData;
+    ListView levelListView;
+    SliderInt levelSizeSlider;
+    EnumField mapAssetTypes;
+
     static float width = 1000;
     static float height = 600;
 
@@ -109,15 +115,35 @@ public class GauntletLevelEditor : EditorWindow
         //game root
         {
             gameRoot.Add(new Label("Choose a Gauntlet Game:"));
-            ObjectField gameData = new ObjectField();
+            gameData = new ObjectField();
             gameData.objectType = typeof(GauntletGame);
             gameRoot.Add(gameData);
+
+            gameData.RegisterCallback<ChangeEvent<UnityEngine.Object>>((evt) =>
+            {
+                var change = (evt.target as ObjectField).value;
+                game = change as GauntletGame;
+                levelData.value = null;
+                rebindLevelListView();
+            });
+
+            Button createGameButton = new Button(() =>
+            {
+                var newGame = CreateInstance<GauntletGame>();
+                var path = "Assets/Resources/Gauntlet/GameData";
+                AssetDatabase.CreateAsset(newGame, AssetDatabase.GenerateUniqueAssetPath(path + "/GameData-00.asset"));
+                EditorUtility.SetDirty(newGame);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                gameData.value = newGame;
+            });
+            createGameButton.text = "Create New Game";
+            gameRoot.Add(createGameButton);
+
 
             Button saveDataButton = new Button();
             saveDataButton.text = "Save Game Data";
             gameRoot.Add(saveDataButton);
-
-
 
             VisualElement levelListDataRoot = new VisualElement()
             {
@@ -155,64 +181,143 @@ public class GauntletLevelEditor : EditorWindow
 
             Label levelLabel = new Label("List of Levels:");
             levelListRoot.Add(levelLabel);
-            levelListRoot.Add(createLevelList());
+            levelListRoot.Add(createLevelListView());
 
-            Button upButton = new Button();
-            Button downButton = new Button();
-            Button removeButton = new Button();
+            Button upButton = new Button(() =>
+            {
+                if (game != null)
+                {
+                    int newIndex = game.changeLevelOrder(levelListView.selectedIndex, true);
+                    rebindLevelListView();
+                    levelListView.selectedIndex = newIndex;
+                }
+            });
+            Button downButton = new Button(() =>
+            {
+                if (game != null)
+                {
+                    int newIndex = game.changeLevelOrder(levelListView.selectedIndex, false);
+                    rebindLevelListView();
+                    levelListView.selectedIndex = newIndex;
+                }
+            });
+            Button removeButton = new Button(() =>
+            {
+                if (game != null && levelListView.selectedIndex >= 0)
+                {
+                    game.levels.RemoveAt(levelListView.selectedIndex);
+                    rebindLevelListView();
+                }
+            });
+            Button openButton = new Button(() =>
+            {
+                if (game != null && levelListView.selectedIndex >= 0)
+                {
+                    levelData.value = game.levels[levelListView.selectedIndex];
+                }
+            });
             upButton.text = "Move Up";
             downButton.text = "Move Down";
             removeButton.text = "Remove";
+            openButton.text = "Open";
             levelButtonsRoot.Add(upButton);
             levelButtonsRoot.Add(downButton);
             levelButtonsRoot.Add(removeButton);
+            levelButtonsRoot.Add(openButton);
 
             // Level 
             gameRoot.Add(new Label("Choose a Level to edit:"));
-            ObjectField gauntletLevel = new ObjectField();
-            gauntletLevel.objectType = typeof(GauntletLevel);
-            gameRoot.Add(gauntletLevel);
+            levelData = new ObjectField();
+            levelData.objectType = typeof(GauntletLevel);
+            gameRoot.Add(levelData);
             gameRoot.Add(new Label("Level Name:"));
-            gameRoot.Add(new TextField());
-            Button addLevelButton = new Button();
+
+            levelData.RegisterCallback<ChangeEvent<UnityEngine.Object>>((evt) =>
+            {
+                var change = (evt.target as ObjectField).value;
+                level = change as GauntletLevel;
+                UpdateLevelBinding();
+                tileMap.createGrid(level);
+            });
+
+            var levelName = new TextField();
+            levelName.bindingPath = "levelName";
+            gameRoot.Add(levelName);
+            Button addLevelButton = new Button(() =>
+            {
+                if(game != null && level != null)
+                {
+                    game.levels.Add(level);
+                    EditorUtility.SetDirty(game);
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                    rebindLevelListView();
+                }
+            });
             addLevelButton.text = "Add Level To Game";
             gameRoot.Add(addLevelButton);
 
             // New Level
-            Button newLevelButton = new Button()
+            Button newLevelButton = new Button(() =>
             {
-                text = "Create New Level",
-                style =
-                {
-                    marginTop = 40
-                }
-            };
+                var newLevel = CreateInstance<GauntletLevel>();
+                newLevel.initialize("TestLevel", levelSizeSlider.value, 590);
+                var path = "Assets/Resources/Gauntlet/LevelData";
+                AssetDatabase.CreateAsset(newLevel, AssetDatabase.GenerateUniqueAssetPath(path + "/LevelData-00.asset"));
+                EditorUtility.SetDirty(newLevel);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                levelData.value = newLevel;
+            });
+
+            newLevelButton.text = "Create New Level";
+            newLevelButton.style.marginTop = 40;
             gameRoot.Add(newLevelButton);
-            gameRoot.Add(new Label("Size of New Level:"));
-            gameRoot.Add(new SliderInt(2, 50));
+
+            levelSizeSlider = new SliderInt(5, 35);
+            levelSizeSlider.value = 20;
+            var levelSizeLabel = new Label("Size of New Level:" + levelSizeSlider.value);
+            gameRoot.Add(levelSizeLabel);
+            levelSizeSlider.RegisterCallback<ChangeEvent<int>>((evt) =>
+            {
+                levelSizeLabel.text = "Size of New Level:  " + evt.newValue;
+            });
+
+            gameRoot.Add(levelSizeSlider);
         }
 
 
         // map root
-        GauntletLevel testLevel = new GauntletLevel("TestLevel", 20, 590); // will be deleted later, used for testing
-        level = testLevel;
+        //GauntletLevel testLevel = new GauntletLevel("TestLevel", 20, 590); // will be deleted later, used for testing
+        //level = testLevel;
 
         tileMap = new TileMap();
-        tileMap.createGrid(level);
+        //tileMap.createGrid(level);
         tileMap.levelEditor = this;
         mapRoot.Add(tileMap.gridContainer);
 
 
         // Level Root
         levelRoot.Add(new Label("Choose an asset to place:"));
-        EnumField mapAssetTypes = new EnumField(MapAssetTypes.GroundTile);
+        mapAssetTypes = new EnumField(MapAssetTypes.GroundTile);
+        mapAssetTypes.RegisterCallback<ChangeEvent<Enum>>((evt) =>
+        {
+            rebindPrefabListView();
+        });
         levelRoot.Add(mapAssetTypes);
         //levelRoot.Add(createSpriteList());
         levelRoot.Add(createMapTileList());
 
         levelRoot.Add(new Toggle("Set as start point"));
         levelRoot.Add(new Toggle("Set as portal to next level"));
-        IntegerField timeLimit = new IntegerField("Time Limit (s):");
+        var timeLimit = new SliderInt(60, 600);
+        var timeLimitLabel = new Label("Time Limit:   " + timeLimit.value + " seconds");
+        levelRoot.Add(timeLimitLabel);
+        timeLimit.RegisterCallback<ChangeEvent<int>>((evt) =>
+        {
+            timeLimitLabel.text = "Time Limit:   " + evt.newValue + " seconds";
+        });
+        timeLimit.bindingPath = "timeLimit";
         levelRoot.Add(timeLimit);
         levelRoot.Add(new Label("Current Layer:"));
 
@@ -225,13 +330,32 @@ public class GauntletLevelEditor : EditorWindow
 
         levelRoot.Add(mapLayers);
         levelRoot.Add(new Label("Viewable layers in editor:"));
-        levelRoot.Add(new Toggle("Layer 1"));
-        levelRoot.Add(new Toggle("Layer 2"));
-        levelRoot.Add(new Toggle("Layer 3"));
+        var layer1Toggle = new Toggle("Layer 1") { value = true };
+        var layer2Toggle = new Toggle("Layer 2") { value = true }; 
+        var layer3Toggle = new Toggle("Layer 3") { value = true }; 
+
+        layer1Toggle.RegisterCallback<ChangeEvent<bool>>((evt) =>
+        {
+            tileMap.layersOn[0] = evt.newValue;
+        });
+        
+        layer2Toggle.RegisterCallback<ChangeEvent<bool>>((evt) =>
+        {
+            tileMap.layersOn[1] = evt.newValue;
+        });
+        
+        layer3Toggle.RegisterCallback<ChangeEvent<bool>>((evt) =>
+        {
+            tileMap.layersOn[2] = evt.newValue;
+        });
+
+        levelRoot.Add(layer1Toggle);
+        levelRoot.Add(layer2Toggle);
+        levelRoot.Add(layer3Toggle);
 
 
         //createEditAssetButton.style.marginTop = 40;
-        
+
         levelRoot.Add(new Label("Type of asset to create/edit:"));
         EnumField assetEnums = new EnumField(AssetTypes.Enemy);
         levelRoot.Add(assetEnums);
@@ -275,15 +399,15 @@ public class GauntletLevelEditor : EditorWindow
     }
 
 
-    public ListView createLevelList()
+    public ListView createLevelListView()
     {
-        const int itemCount = 10;
-        var items = new List<GauntletLevel>(itemCount);
-        for (int i = 1; i <= itemCount; i++)
-        {
-            GauntletLevel level = new GauntletLevel("Level " + i.ToString(), 30, 300);
-            items.Add(level);
-        }
+        //const int itemCount = 10;
+        var items = new List<GauntletLevel>();
+        //for (int i = 1; i <= itemCount; i++)
+        //{
+        //    levelData level = new levelData("Level " + i.ToString(), 30, 300);
+        //    items.Add(level);
+        //}
 
         Func<VisualElement> makeItem = () => new Label()
         {
@@ -298,14 +422,18 @@ public class GauntletLevelEditor : EditorWindow
 
         Action<VisualElement, int> bindItem = (e, i) =>
         {
-            (e as Label).text = items[i].levelName;
+            if(game)
+            {
+                (e as Label).text = game.levels[i].levelName;
+            }
         };
 
         // Provide the list view with an explict height for every row
         // so it can calculate how many items to actually display
         const int itemHeight = 40;
 
-        var listView = new ListView(items, itemHeight, makeItem, bindItem)
+
+        levelListView = new ListView(items, itemHeight, makeItem, bindItem)
         {
             style =
             {
@@ -313,11 +441,11 @@ public class GauntletLevelEditor : EditorWindow
             }
         };
 
-        listView.selectionType = SelectionType.Single;
 
-        listView.style.flexGrow = 1.0f;
+        levelListView.selectionType = SelectionType.Single;
 
-        return listView;
+        levelListView.style.flexGrow = 1.0f;
+        return levelListView;
     }
 
     public ListView createSpriteList()
@@ -383,7 +511,7 @@ public class GauntletLevelEditor : EditorWindow
     public ListView createMapTileList()
     {
         mapObjects = new List<MapObject>();
-        UnityEngine.Object[] objects = Resources.LoadAll<GroundTile>("Prefabs/GroundTiles");
+        UnityEngine.Object[] objects = Resources.LoadAll<GroundTile>("Gauntlet/Prefabs/GroundTiles");
         for (int i = 0; i < objects.Length; i++)
             mapObjects.Add(objects[i] as MapObject);
 
@@ -446,11 +574,79 @@ public class GauntletLevelEditor : EditorWindow
         return mapObjectListView;
     }
 
+    private void rebindLevelListView()
+    {
+        if(game != null && levelListView != null)
+        {
+            levelListView.itemsSource = game.levels;
+            levelListView.Refresh();
+            Repaint();
+        }
+    }
+
+    public void rebindPrefabListView()
+    {
+        string prefabDirectory = "";
+        if(mapObjectListView != null)
+        {
+            switch (mapAssetTypes.value)
+            {
+                case MapAssetTypes.GroundTile:
+                    {
+                        prefabDirectory = "GroundTiles";
+                        break;
+                    }
+                case MapAssetTypes.Item:
+                    {
+                        prefabDirectory = "Items";
+                        break;
+                    }
+                case MapAssetTypes.SpawnFactory:
+                    {
+                        prefabDirectory = "SpawnFactories";
+                        break;
+                    }
+                default: break;
+            }
+            mapObjects = new List<MapObject>();
+            UnityEngine.Object[] objects = Resources.LoadAll<GroundTile>("Gauntlet/Prefabs/" + prefabDirectory);
+            for (int i = 0; i < objects.Length; i++)
+            {
+                mapObjects.Add(objects[i] as MapObject);
+            }
+
+            mapObjectListView.itemsSource = mapObjects;
+            mapObjectListView.Refresh();
+            Repaint();
+        }
+    }
     private void OnDestroy()
     {
         if(assetWindow != null)
         {
             assetWindow.Close();
+        }
+    }
+
+    public void UpdateLevelBinding()
+    {
+        if (level != null)
+        {
+            // Create serialization object
+            SerializedObject so = new SerializedObject(level);
+            // Bind it to the root of the hierarchy. It will find the right object to bind to...
+            rootVisualElement.Bind(so);
+
+            // ... or alternatively you can also bind it to the TextField itself.
+            // m_ObjectNameBinding.Bind(so);
+        }
+        else
+        {
+            // Unbind the object from the actual visual element
+            rootVisualElement.Unbind();
+
+            // Clear the TextField after the binding is removed
+            // m_ObjectNameBinding.value = "";
         }
     }
 }

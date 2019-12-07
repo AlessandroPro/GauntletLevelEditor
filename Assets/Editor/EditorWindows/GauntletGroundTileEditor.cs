@@ -15,6 +15,7 @@ public class GauntletGroundTileEditor : EditorWindow
 
     // Properties
     TextField nameTextField;
+    ObjectField groundTileData;
     ObjectField groundTileSprite;
     Image groundTileSpriteImage;
 
@@ -76,7 +77,7 @@ public class GauntletGroundTileEditor : EditorWindow
 
         // Data
         dataRoot.Add(new Label("Choose a Ground Tile:"));
-        ObjectField groundTileData = new ObjectField();
+        groundTileData = new ObjectField();
         groundTileData.objectType = typeof(GroundTile);
         dataRoot.Add(groundTileData);
 
@@ -92,8 +93,19 @@ public class GauntletGroundTileEditor : EditorWindow
         dataRoot.Add(nameTextField);
 
         // sprites
-        Button newData = new Button();
-        newData.text = "New";
+        Button newData = new Button(() =>
+        {
+            GroundTile tile = CreateInstance<GroundTile>();
+            //var path = EditorUtility.SaveFilePanel("Create Prefab", "Assets/Resources/Prefabs/GroundTiles/", "", "asset");
+            //AssetDatabase.CreateAsset(tile, path);
+            var path = "Assets/Resources/Gauntlet/Prefabs/GroundTiles";
+            AssetDatabase.CreateAsset(tile, AssetDatabase.GenerateUniqueAssetPath(path + "/GroundTile-00.asset"));
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            groundTileData.value = tile;
+            UpdateBinding();
+        });
+       newData.text = "New";
         spriteRoot.Add(newData);
         spriteRoot.Add(new Label("Ground Tile Sprite:"));
         groundTileSprite = new ObjectField();
@@ -127,7 +139,10 @@ public class GauntletGroundTileEditor : EditorWindow
         groundTileSprite.RegisterCallback<ChangeEvent<Object>>((evt) =>
         {
            var change = (evt.target as ObjectField).value;
-           groundTileSpriteImage.image = (change as Sprite).texture;
+           if((change as Sprite).texture)
+            {
+                groundTileSpriteImage.image = (change as Sprite).texture;
+            }
         });
 
         //groundTileSpriteImage.image = (groundTileSprite.value as Sprite).texture;
