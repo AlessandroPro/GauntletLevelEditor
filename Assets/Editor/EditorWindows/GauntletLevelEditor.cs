@@ -5,13 +5,16 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.ShortcutManagement;
 using UnityEditor.UIElements;
+using System.IO;
+using Newtonsoft.Json;
 
-
-public enum MapAssetTypes
+public enum MapPrefabTypes
 {
     GroundTile,
     Item,
-    SpawnFactory
+    SpawnFactory,
+    SpawnPoint,
+    Portal
 }
 
 public enum MapLayers
@@ -21,13 +24,16 @@ public enum MapLayers
     Layer3
 }
 
-public enum AssetTypes
+public enum PrefabTypes
 {
     Enemy,
+    Projectile,
     Player,
     SpawnFactory,
     Item,
-    GroundTile
+    GroundTile,
+    SpawnPoint,
+    Portal
 }
 
 public class GauntletLevelEditor : EditorWindow
@@ -47,7 +53,7 @@ public class GauntletLevelEditor : EditorWindow
     ObjectField levelData;
     ListView levelListView;
     SliderInt levelSizeSlider;
-    EnumField mapAssetTypes;
+    EnumField MapPrefabTypesField;
 
     static float width = 1000;
     static float height = 600;
@@ -61,12 +67,11 @@ public class GauntletLevelEditor : EditorWindow
         _window.titleContent = new GUIContent("Gauntlet Level Editor");
         _window.maxSize = new Vector2(width, height);
         _window.minSize = new Vector2(width, height);
-        _window.Repaint();
     }
 
     private void Update()
     {
-        if(assetWindow)
+        if(assetWindow && _window)
         {
            var assetWindowPos = new Vector2(_window.position.x + _window.position.width, _window.position.y);
            assetWindow.position = new Rect(assetWindowPos, assetWindow.position.size);
@@ -77,18 +82,18 @@ public class GauntletLevelEditor : EditorWindow
     {
         VisualElement root = this.rootVisualElement;
         root.style.flexDirection = FlexDirection.Row;
-        root.style.paddingTop = 10;
-        root.style.paddingBottom = 10;
-        root.style.paddingLeft = 10;
-        root.style.paddingRight = 10;
+        root.style.paddingTop = 20;
+        root.style.paddingBottom = 20;
+
 
 
         VisualElement gameRoot = new VisualElement()
         {
             style =
             {
-                width = _window.maxSize.x * 0.2f,
-                paddingRight = 10
+                width = width * 0.22f,
+                paddingRight = 20,
+                paddingLeft = 20
             }
         };
         VisualElement mapRoot = new VisualElement()
@@ -96,15 +101,16 @@ public class GauntletLevelEditor : EditorWindow
             style =
             {
                 alignContent = Align.Center,
-                width = _window.maxSize.x * 0.6f
+                width = width * 0.56f
             }
         };
         VisualElement levelRoot = new VisualElement()
         {
             style =
             {
-                width = _window.maxSize.x * 0.2f,
-                paddingLeft = 10
+                width = width * 0.22f,
+                paddingLeft = 20,
+                paddingRight = 20
             }
         };
 
@@ -141,7 +147,24 @@ public class GauntletLevelEditor : EditorWindow
             gameRoot.Add(createGameButton);
 
 
-            Button saveDataButton = new Button();
+            Button saveDataButton = new Button(() =>
+            {
+                var path = EditorUtility.SaveFilePanel("Export Game Data", "", "levelData.json", "json");
+                var destinationPath = Path.GetDirectoryName(path);
+                if (path.Length != 0)
+                {
+                    if(level != null)
+                    {
+                        var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+                        var json = JsonConvert.SerializeObject(level.saveLevel(), settings);
+                        //string json = JsonUtility.ToJson(level.saveLevel());
+
+                        StreamWriter writer = new StreamWriter(path);
+                        writer.Write(json);
+                        writer.Close();
+                    }
+                }
+            });
             saveDataButton.text = "Save Game Data";
             gameRoot.Add(saveDataButton);
 
@@ -209,7 +232,7 @@ public class GauntletLevelEditor : EditorWindow
                     rebindLevelListView();
                 }
             });
-            Button openButton = new Button(() =>
+            Button editButton = new Button(() =>
             {
                 if (game != null && levelListView.selectedIndex >= 0)
                 {
@@ -219,11 +242,11 @@ public class GauntletLevelEditor : EditorWindow
             upButton.text = "Move Up";
             downButton.text = "Move Down";
             removeButton.text = "Remove";
-            openButton.text = "Open";
+            editButton.text = "Edit";
             levelButtonsRoot.Add(upButton);
             levelButtonsRoot.Add(downButton);
             levelButtonsRoot.Add(removeButton);
-            levelButtonsRoot.Add(openButton);
+            levelButtonsRoot.Add(editButton);
 
             // Level 
             gameRoot.Add(new Label("Choose a Level to edit:"));
@@ -261,7 +284,7 @@ public class GauntletLevelEditor : EditorWindow
             Button newLevelButton = new Button(() =>
             {
                 var newLevel = CreateInstance<GauntletLevel>();
-                newLevel.initialize("TestLevel", levelSizeSlider.value, 590);
+                newLevel.initialize("TestLevel", levelSizeSlider.value, 570);
                 var path = "Assets/Resources/Gauntlet/LevelData";
                 AssetDatabase.CreateAsset(newLevel, AssetDatabase.GenerateUniqueAssetPath(path + "/LevelData-00.asset"));
                 EditorUtility.SetDirty(newLevel);
@@ -287,29 +310,28 @@ public class GauntletLevelEditor : EditorWindow
         }
 
 
-        // map root
-        //GauntletLevel testLevel = new GauntletLevel("TestLevel", 20, 590); // will be deleted later, used for testing
-        //level = testLevel;
-
         tileMap = new TileMap();
-        //tileMap.createGrid(level);
         tileMap.levelEditor = this;
         mapRoot.Add(tileMap.gridContainer);
 
 
         // Level Root
-        levelRoot.Add(new Label("Choose an asset to place:"));
-        mapAssetTypes = new EnumField(MapAssetTypes.GroundTile);
-        mapAssetTypes.RegisterCallback<ChangeEvent<Enum>>((evt) =>
+        levelRoot.Add(new Label("Choose a prefab to place:"));
+        MapPrefabTypesField = new EnumField(MapPrefabTypes.GroundTile);
+        MapPrefabTypesField.RegisterCallback<ChangeEvent<Enum>>((evt) =>
         {
             rebindPrefabListView();
         });
-        levelRoot.Add(mapAssetTypes);
+        levelRoot.Add(MapPrefabTypesField);
         //levelRoot.Add(createSpriteList());
         levelRoot.Add(createMapTileList());
 
-        levelRoot.Add(new Toggle("Set as start point"));
-        levelRoot.Add(new Toggle("Set as portal to next level"));
+        var eraseToggle = new Toggle("Erase Mode");
+        eraseToggle.RegisterCallback<ChangeEvent<bool>>((evt) =>
+        {
+            tileMap.eraseMode = evt.newValue;
+        });
+        levelRoot.Add(eraseToggle);
         var timeLimit = new SliderInt(60, 600);
         var timeLimitLabel = new Label("Time Limit:   " + timeLimit.value + " seconds");
         levelRoot.Add(timeLimitLabel);
@@ -354,38 +376,36 @@ public class GauntletLevelEditor : EditorWindow
         levelRoot.Add(layer3Toggle);
 
 
-        //createEditAssetButton.style.marginTop = 40;
-
         levelRoot.Add(new Label("Type of asset to create/edit:"));
-        EnumField assetEnums = new EnumField(AssetTypes.Enemy);
-        levelRoot.Add(assetEnums);
-        Button createEditAssetButton = new Button(() =>
+        EnumField prefabEnums = new EnumField(PrefabTypes.GroundTile);
+        levelRoot.Add(prefabEnums);
+        Button createEditPrefabButton = new Button(() =>
         {
-            switch (assetEnums.value)
+            switch (prefabEnums.value)
             {
-                case AssetTypes.Player:
+                case PrefabTypes.Player:
                     {
-                        GauntletPlayerEditor.createWindow();
+                        //GauntletPlayerEditor.createWindow();
                         break;
                     }
-                case AssetTypes.Enemy:
+                case PrefabTypes.Enemy:
                     {
-                        GauntletEnemyEditor.createWindow();
+                        //GauntletEnemyEditor.createWindow();
                         break;
                     }
-                case AssetTypes.GroundTile:
+                case PrefabTypes.GroundTile:
                     {
                         assetWindow = GauntletGroundTileEditor.createWindow(_window);
                         break;
                     }
-                case AssetTypes.SpawnFactory:
+                case PrefabTypes.SpawnFactory:
                     {
-                        GauntletSpawnFactoryEditor.createWindow();
+                        //GauntletSpawnFactoryEditor.createWindow();
                         break;
                     }
-                case AssetTypes.Item:
+                case PrefabTypes.Item:
                     {
-                        GauntletItemEditor.createWindow();
+                        //GauntletItemEditor.createWindow();
                         break;
                     }
                 default: break;
@@ -393,21 +413,15 @@ public class GauntletLevelEditor : EditorWindow
 
 
         });
-        createEditAssetButton.text = "Create/Edit Asset";
-        levelRoot.Add(createEditAssetButton);
+        createEditPrefabButton.text = "Create/Edit Prefab";
+        levelRoot.Add(createEditPrefabButton);
 
     }
 
 
     public ListView createLevelListView()
     {
-        //const int itemCount = 10;
         var items = new List<GauntletLevel>();
-        //for (int i = 1; i <= itemCount; i++)
-        //{
-        //    levelData level = new levelData("Level " + i.ToString(), 30, 300);
-        //    items.Add(level);
-        //}
 
         Func<VisualElement> makeItem = () => new Label()
         {
@@ -510,10 +524,6 @@ public class GauntletLevelEditor : EditorWindow
 
     public ListView createMapTileList()
     {
-        mapObjects = new List<MapObject>();
-        UnityEngine.Object[] objects = Resources.LoadAll<GroundTile>("Gauntlet/Prefabs/GroundTiles");
-        for (int i = 0; i < objects.Length; i++)
-            mapObjects.Add(objects[i] as MapObject);
 
         // The "makeItem" function will be called as needed
         // when the ListView needs more items to render
@@ -521,14 +531,14 @@ public class GauntletLevelEditor : EditorWindow
         {
             style =
                 {
-                    width = 50,
-                    height = 50,
+                    width = mapObjectListView.contentRect.width,
+                    height = 100,
                     justifyContent = Justify.Center,
                     alignSelf = Align.Center,
-                    paddingTop = 10f,
-                    paddingBottom = 10f,
-                    paddingLeft = 10f,
-                    paddingRight = 10f,
+                    paddingTop = 30f,
+                    paddingBottom = 30f,
+                    paddingLeft = mapObjectListView.contentRect.width * 0.16f,
+                    paddingRight = mapObjectListView.contentRect.width * 0.24f,
                 },
             scaleMode = ScaleMode.ScaleToFit
 
@@ -536,12 +546,21 @@ public class GauntletLevelEditor : EditorWindow
 
         Action<VisualElement, int> bindItem = (e, i) =>
         {
-            (e as Image).image = mapObjects[i].mainSprite.texture;
+            var sprite = mapObjects[i].mainSprite;
+            if(sprite == null)
+            {
+                (e as Image).image = Texture2D.whiteTexture;
+            }
+            else
+            {
+                var image = e as Image;
+                rebindImageTexture(ref image, sprite);
+            }
         };
 
         // Provide the list view with an explict height for every row
         // so it can calculate how many items to actually display
-        const int itemHeight = 70;
+        const int itemHeight = 120;
 
         mapObjectListView = new ListView(mapObjects, itemHeight, makeItem, bindItem)
         {
@@ -550,6 +569,8 @@ public class GauntletLevelEditor : EditorWindow
                 backgroundColor = Color.gray
             }
         };
+
+        rebindPrefabListView();
 
         mapObjectListView.selectionType = SelectionType.Single;
 
@@ -589,19 +610,19 @@ public class GauntletLevelEditor : EditorWindow
         string prefabDirectory = "";
         if(mapObjectListView != null)
         {
-            switch (mapAssetTypes.value)
+            switch (MapPrefabTypesField.value)
             {
-                case MapAssetTypes.GroundTile:
+                case MapPrefabTypes.GroundTile:
                     {
                         prefabDirectory = "GroundTiles";
                         break;
                     }
-                case MapAssetTypes.Item:
+                case MapPrefabTypes.Item:
                     {
                         prefabDirectory = "Items";
                         break;
                     }
-                case MapAssetTypes.SpawnFactory:
+                case MapPrefabTypes.SpawnFactory:
                     {
                         prefabDirectory = "SpawnFactories";
                         break;
@@ -612,7 +633,11 @@ public class GauntletLevelEditor : EditorWindow
             UnityEngine.Object[] objects = Resources.LoadAll<GroundTile>("Gauntlet/Prefabs/" + prefabDirectory);
             for (int i = 0; i < objects.Length; i++)
             {
-                mapObjects.Add(objects[i] as MapObject);
+                var mapObject = objects[i] as MapObject;
+                if(mapObject.mainSprite)
+                {
+                    mapObjects.Add(mapObject);
+                }
             }
 
             mapObjectListView.itemsSource = mapObjects;
@@ -636,18 +661,33 @@ public class GauntletLevelEditor : EditorWindow
             SerializedObject so = new SerializedObject(level);
             // Bind it to the root of the hierarchy. It will find the right object to bind to...
             rootVisualElement.Bind(so);
-
-            // ... or alternatively you can also bind it to the TextField itself.
-            // m_ObjectNameBinding.Bind(so);
         }
         else
         {
             // Unbind the object from the actual visual element
             rootVisualElement.Unbind();
 
-            // Clear the TextField after the binding is removed
-            // m_ObjectNameBinding.value = "";
         }
+    }
+
+    public static void rebindImageTexture(ref Image image, Sprite sprite)
+    {
+        image.image = sprite.texture;
+        var spriteRect = sprite.rect;
+        // Small hack to get the image rect's y-axis to line up with the sprite's rect
+        // if the sprite is from a sliced spritesheet
+        if (sprite.rect.width < sprite.texture.width)
+        {
+            float newY = sprite.texture.height - spriteRect.y - spriteRect.height;
+            Rect newRect = new Rect(spriteRect.x, newY, spriteRect.width, spriteRect.height);
+            image.sourceRect = newRect;
+        }
+        else
+        {
+            image.sourceRect = sprite.rect;
+        }
+
+        image.MarkDirtyRepaint();
     }
 }
 

@@ -4,11 +4,18 @@ using UnityEngine.UIElements;
 using UnityEditor.ShortcutManagement;
 using UnityEditor.UIElements;
 
+public class Spacer : Label
+{
+    public Spacer(int space)
+    {
+        style.marginTop = space;
+    }
+}
 public class GauntletGroundTileEditor : EditorWindow
 {
     static GauntletGroundTileEditor _window = null;
     static GauntletLevelEditor parentWindow = null;
-    static float width = 400;
+    static float width = 450;
 
 
     static GroundTile groundTile;
@@ -19,15 +26,11 @@ public class GauntletGroundTileEditor : EditorWindow
     ObjectField groundTileSprite;
     Image groundTileSpriteImage;
 
-
-
-
-    //[MenugroundTile("Tools/GauntLet Ground Tile Editor")]
     public static EditorWindow createWindow(GauntletLevelEditor _parentWindow)
     {
         if (_window != null) _window.Close();
         _window = GetWindow<GauntletGroundTileEditor>();
-        _window.titleContent = new GUIContent("Gauntlet Ground Tile Editor");
+        _window.titleContent = new GUIContent("Ground Tile Editor");
         _window.maxSize = new Vector2(width, _parentWindow.position.height);
         _window.minSize = new Vector2(width, _parentWindow.position.height);
         _window.Repaint();
@@ -59,7 +62,7 @@ public class GauntletGroundTileEditor : EditorWindow
         {
             style =
             {
-                width = _window.maxSize.x * 0.7f,
+                width = width * 0.6f,
                 paddingRight = 30
             }
         };
@@ -68,7 +71,7 @@ public class GauntletGroundTileEditor : EditorWindow
             style =
             {
                 alignContent = Align.Center,
-                width = _window.maxSize.x * 0.3f
+                width = width * 0.4f
             }
         };
 
@@ -88,7 +91,9 @@ public class GauntletGroundTileEditor : EditorWindow
             UpdateBinding();
         });
 
-        nameTextField = new TextField("Name:");
+        dataRoot.Add(new Spacer(30));
+        dataRoot.Add(new Label("Name:"));
+        nameTextField = new TextField();
         nameTextField.bindingPath = "objectName";
         dataRoot.Add(nameTextField);
 
@@ -96,8 +101,6 @@ public class GauntletGroundTileEditor : EditorWindow
         Button newData = new Button(() =>
         {
             GroundTile tile = CreateInstance<GroundTile>();
-            //var path = EditorUtility.SaveFilePanel("Create Prefab", "Assets/Resources/Prefabs/GroundTiles/", "", "asset");
-            //AssetDatabase.CreateAsset(tile, path);
             var path = "Assets/Resources/Gauntlet/Prefabs/GroundTiles";
             AssetDatabase.CreateAsset(tile, AssetDatabase.GenerateUniqueAssetPath(path + "/GroundTile-00.asset"));
             AssetDatabase.SaveAssets();
@@ -107,6 +110,7 @@ public class GauntletGroundTileEditor : EditorWindow
         });
        newData.text = "New";
         spriteRoot.Add(newData);
+        spriteRoot.Add(new Spacer(30));
         spriteRoot.Add(new Label("Ground Tile Sprite:"));
         groundTileSprite = new ObjectField();
         groundTileSprite.objectType = typeof(Sprite);
@@ -116,20 +120,15 @@ public class GauntletGroundTileEditor : EditorWindow
         {
             style =
                 {
-                    width = 80,
-                    height = 80,
-                    paddingTop = 10f,
-                    paddingBottom = 10f,
-                    paddingLeft = 10f,
-                    paddingRight = 10f,
+                    width = 100,
+                    height = 100,
                     borderLeftWidth = 2,
                     borderRightWidth = 2,
                     borderTopWidth = 2,
                     borderBottomWidth = 2,
                     marginTop = 10,
                     marginBottom = 20,
-                    marginLeft = 25,
-                    marginRight = 25,
+                    marginLeft = 30,
                     borderColor = Color.gray
 
                 },
@@ -138,14 +137,26 @@ public class GauntletGroundTileEditor : EditorWindow
 
         groundTileSprite.RegisterCallback<ChangeEvent<Object>>((evt) =>
         {
-           var change = (evt.target as ObjectField).value;
-           if((change as Sprite).texture)
+            
+            var change = (evt.target as ObjectField).value;
+           if(change)
             {
-                groundTileSpriteImage.image = (change as Sprite).texture;
+                var sprite = change as Sprite;
+                GauntletLevelEditor.rebindImageTexture(ref groundTileSpriteImage, sprite);
             }
+            else
+            {
+                groundTileSpriteImage.image = null;
+            }
+
+            if (groundTileData.value)
+            {
+                (groundTileData.value as GroundTile).mainSprite = change as Sprite;
+            }
+            Repaint();
+            parentWindow.rebindPrefabListView();
         });
 
-        //groundTileSpriteImage.image = (groundTileSprite.value as Sprite).texture;
         spriteRoot.Add(groundTileSpriteImage);
     }
 
@@ -155,11 +166,9 @@ public class GauntletGroundTileEditor : EditorWindow
         {
             // Create serialization object
             SerializedObject so = new SerializedObject(groundTile);
-            // Bind it to the root of the hierarchy. It will find the right object to bind to...
+            // Bind it to the root of the hierarchy. 
             rootVisualElement.Bind(so);
 
-            // ... or alternatively you can also bind it to the TextField itself.
-            // m_ObjectNameBinding.Bind(so);
         }
         else
         {

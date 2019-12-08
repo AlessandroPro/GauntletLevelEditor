@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
   m_Name: GroundTile-02
   m_EditorClassIdentifier: 
-  objectName: MapObjecthjjj
-  mainSprite: {fileID: 21300000, guid: 5791dd7c9bd71924091d2dd22c6e5a05, type: 3}
+  objectName: Path
+  mainSprite: {fileID: -337690052438807397, guid: b2f6e325811d724469afeb055ac0f511,
+    type: 3}
+  prefabGuid: 

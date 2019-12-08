@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
-  m_Name: GroundTile-01
+  m_Name: GroundTile-07
   m_EditorClassIdentifier: 
-  objectName: Water
-  mainSprite: {fileID: -4110059370805265076, guid: b2f6e325811d724469afeb055ac0f511,
+  objectName: Key
+  mainSprite: {fileID: -7385175419658825098, guid: b2f6e325811d724469afeb055ac0f511,
     type: 3}
   prefabGuid: 

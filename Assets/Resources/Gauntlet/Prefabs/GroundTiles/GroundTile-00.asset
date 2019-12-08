@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
   m_Name: GroundTile-00
   m_EditorClassIdentifier: 
-  objectName: RightcccCornervvv
-  mainSprite: {fileID: 21300000, guid: 70d5a22f5039f644bb59193b101e2e3b, type: 3}
+  objectName: Wall1
+  mainSprite: {fileID: 6550650082045323188, guid: b2f6e325811d724469afeb055ac0f511,
+    type: 3}
+  prefabGuid: 

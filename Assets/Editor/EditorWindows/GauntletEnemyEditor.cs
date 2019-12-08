@@ -38,6 +38,7 @@ public class GauntletEnemyEditor : EditorWindow
         root.style.paddingRight = 10;
 
 
+
         VisualElement dataRoot = new VisualElement()
         {
             style =
