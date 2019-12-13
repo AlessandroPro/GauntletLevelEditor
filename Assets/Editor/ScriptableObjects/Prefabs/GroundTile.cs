@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GroundTile-00", menuName = "Gauntlet Prefabs/Ground Tile")]
+//[CreateAssetMenu(fileName = "GroundTile-00", menuName = "Gauntlet Prefabs/Ground Tile")]
 public class GroundTile : MapObject
 {
+    public bool isCollider = false;
+    public bool isTrigger = false;
     //public override void save()
     //{
     //    SimpleJSON.JSONObject node = new SimpleJSON.JSONObject();
@@ -20,10 +22,18 @@ public class GroundTile : MapObject
     public override Game.GameObject save()
     {
         Game.GameObject gameObject = new Game.GameObject();
-        gameObject.Components.Add(new Game.Transform());
-        gameObject.Components.Add(new Game.Sprite());
 
-        gameObject.name = objectName;
+        Game.PolygonCollider pCol;
+
+        if(isCollider)
+        {
+            pCol = new Game.PolygonCollider();
+            if(isTrigger)
+            {
+                pCol.trigger = true;
+            }
+            gameObject.Components.Add(pCol);
+        }
 
         return gameObject;
     }

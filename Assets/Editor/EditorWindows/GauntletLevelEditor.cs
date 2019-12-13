@@ -150,10 +150,16 @@ public class GauntletLevelEditor : EditorWindow
             Button saveDataButton = new Button(() =>
             {
                 var path = EditorUtility.SaveFilePanel("Export Game Data", "", "levelData.json", "json");
-                var destinationPath = Path.GetDirectoryName(path);
+                
+                if(path == null)
+                {
+                    return;
+                }
+
                 if (path.Length != 0)
                 {
-                    if(level != null)
+                    var destinationPath = Path.GetDirectoryName(path);
+                    if (level != null)
                     {
                         var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
                         var json = JsonConvert.SerializeObject(level.saveLevel(), settings);
@@ -385,7 +391,7 @@ public class GauntletLevelEditor : EditorWindow
             {
                 case PrefabTypes.Player:
                     {
-                        //GauntletPlayerEditor.createWindow();
+                        assetWindow = PrefabEditor.createWindow<GauntletPlayerEditor>(_window, "Player Editor");
                         break;
                     }
                 case PrefabTypes.Enemy:
@@ -395,12 +401,12 @@ public class GauntletLevelEditor : EditorWindow
                     }
                 case PrefabTypes.GroundTile:
                     {
-                        assetWindow = GauntletGroundTileEditor.createWindow(_window);
+                        assetWindow = PrefabEditor.createWindow<GauntletGroundTileEditor>(_window, "Ground Tile Editor");
                         break;
                     }
                 case PrefabTypes.SpawnFactory:
                     {
-                        //GauntletSpawnFactoryEditor.createWindow();
+                        assetWindow = PrefabEditor.createWindow<GauntletSpawnFactoryEditor>(_window, "Spawn Factory Editor");
                         break;
                     }
                 case PrefabTypes.Item:
@@ -607,34 +613,35 @@ public class GauntletLevelEditor : EditorWindow
 
     public void rebindPrefabListView()
     {
-        string prefabDirectory = "";
-        if(mapObjectListView != null)
+        mapObjects = new List<MapObject>();
+        UnityEngine.Object[] objects = null;
+
+        if (mapObjectListView != null)
         {
             switch (MapPrefabTypesField.value)
             {
                 case MapPrefabTypes.GroundTile:
                     {
-                        prefabDirectory = "GroundTiles";
+                        objects = Resources.LoadAll<GroundTile>("Gauntlet/Prefabs/GroundTiles");
                         break;
                     }
                 case MapPrefabTypes.Item:
                     {
-                        prefabDirectory = "Items";
+                        objects = Resources.LoadAll<Player>("Gauntlet/Prefabs/Items"); ///CHANGE THIS TO <ITEM>
                         break;
                     }
                 case MapPrefabTypes.SpawnFactory:
                     {
-                        prefabDirectory = "SpawnFactories";
+                        objects = Resources.LoadAll<SpawnFactory>("Gauntlet/Prefabs/SpawnFactories");
                         break;
                     }
                 default: break;
             }
-            mapObjects = new List<MapObject>();
-            UnityEngine.Object[] objects = Resources.LoadAll<GroundTile>("Gauntlet/Prefabs/" + prefabDirectory);
+
             for (int i = 0; i < objects.Length; i++)
             {
                 var mapObject = objects[i] as MapObject;
-                if(mapObject.mainSprite)
+                if (mapObject.mainSprite)
                 {
                     mapObjects.Add(mapObject);
                 }
@@ -643,6 +650,8 @@ public class GauntletLevelEditor : EditorWindow
             mapObjectListView.itemsSource = mapObjects;
             mapObjectListView.Refresh();
             Repaint();
+
+
         }
     }
     private void OnDestroy()

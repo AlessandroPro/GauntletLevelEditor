@@ -37,11 +37,11 @@ namespace Game
     [Serializable]
     public class Transform : Component
     {
-        public Position position;
+        public Position Position;
         public Transform()
         {
             type = "Transform";
-            position = new Position();
+            Position = new Position();
         }
     }
 
@@ -50,11 +50,13 @@ namespace Game
     {
         public Texture Texture;
         public DimensionList Dimensions;
+        public int layer;
         public Sprite()
         {
             type = "Sprite";
             Dimensions = new DimensionList();
             Texture = new Texture();
+            layer = 0;
         }
 
     }
@@ -94,6 +96,15 @@ namespace Game
     }
 
     [Serializable]
+    public class Player : Component
+    {
+        public Player()
+        {
+            type = "Player";
+        }
+    }
+
+    [Serializable]
     public class Text : Component
     {
 
@@ -116,7 +127,7 @@ namespace Game
     [Serializable]
     public class Texture
     {
-        public string textureAssetGUID;
+        public string textureAssetGUID = "5651edc5-61a2-4e2d-8c52-fb04ca66564d";
     }
 
     [Serializable]

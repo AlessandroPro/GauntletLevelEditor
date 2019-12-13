@@ -4,56 +4,20 @@ using UnityEngine.UIElements;
 using UnityEditor.ShortcutManagement;
 using UnityEditor.UIElements;
 
-public class GauntletSpawnFactoryEditor : EditorWindow
+public class GauntletSpawnFactoryEditor : PrefabEditor
 {
-    static GauntletSpawnFactoryEditor _window = null;
-    static float width = 500;
-    static float height = 350;
 
     //[MenuItem("Tools/GauntLet SpawnFactory Editor")]
-    public static void createWindow()
-    {
-        if (_window != null) _window.Close();
-        _window = GetWindow<GauntletSpawnFactoryEditor>();
-        _window.titleContent = new GUIContent("Gauntlet Spawn Factory Editor");
-        _window.maxSize = new Vector2(width, height);
-        _window.minSize = new Vector2(width, height);
-    }
+
 
     public void OnEnable()
     {
-        VisualElement root = this.rootVisualElement;
-        root.style.flexDirection = FlexDirection.Row;
-        root.style.paddingTop = 10;
-        root.style.paddingBottom = 10;
-        root.style.paddingLeft = 10;
-        root.style.paddingRight = 10;
-
-
-        VisualElement dataRoot = new VisualElement()
-        {
-            style =
-            {
-                width = _window.maxSize.x * 0.7f,
-                paddingRight = 30
-            }
-        };
-        VisualElement spriteRoot = new VisualElement()
-        {
-            style =
-            {
-                alignContent = Align.Center,
-                width = _window.maxSize.x * 0.3f
-            }
-        };
-
-        root.Add(dataRoot);
-        root.Add(spriteRoot);
+        setupWindow();
 
         // Data
         dataRoot.Add(new Label("Choose a Spawn Factory:"));
-        ObjectField sfData = new ObjectField();
-        dataRoot.Add(sfData);
+        objectData = new ObjectField();
+        dataRoot.Add(objectData);
 
         dataRoot.Add(new TextField("Name:"));
         dataRoot.Add(new Slider("Health:", 5, 100));
@@ -70,10 +34,10 @@ public class GauntletSpawnFactoryEditor : EditorWindow
         newData.text = "New";
         spriteRoot.Add(newData);
         spriteRoot.Add(new Label("Factory Sprite:"));
-        ObjectField sfSprite = new ObjectField();
-        sfSprite.objectType = typeof(Sprite);
-        spriteRoot.Add(sfSprite);
-        Image sfSpriteImage = new Image()
+        ObjectField objectTileSprite = new ObjectField();
+        objectTileSprite.objectType = typeof(Sprite);
+        spriteRoot.Add(objectTileSprite);
+        Image objectTileSpriteImage = new Image()
         {
             style =
                 {
@@ -96,6 +60,6 @@ public class GauntletSpawnFactoryEditor : EditorWindow
                 },
             scaleMode = ScaleMode.ScaleToFit
         };
-        spriteRoot.Add(sfSpriteImage);
+        spriteRoot.Add(objectTileSpriteImage);
     }
 }

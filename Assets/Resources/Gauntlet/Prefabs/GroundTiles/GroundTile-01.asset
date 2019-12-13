@@ -16,3 +16,5 @@ MonoBehaviour:
   mainSprite: {fileID: -4110059370805265076, guid: b2f6e325811d724469afeb055ac0f511,
     type: 3}
   prefabGuid: 
+  isCollider: 1
+  isTrigger: 0
