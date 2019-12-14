@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
   m_Name: GroundTile-07
   m_EditorClassIdentifier: 
-  objectName: WallWithCollider
-  mainSprite: {fileID: -7514007152789262621, guid: b2f6e325811d724469afeb055ac0f511,
+  objectName: Dirt
+  mainSprite: {fileID: -9156242284377538594, guid: b2f6e325811d724469afeb055ac0f511,
     type: 3}
-  prefabGuid: 
-  isCollider: 1
+  prefabGuid: 71bb7120-71c6-4c6f-a45c-1152e8774fd2
+  isCollider: 0
   isTrigger: 0

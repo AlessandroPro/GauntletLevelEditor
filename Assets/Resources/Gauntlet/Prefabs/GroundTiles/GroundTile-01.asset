@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
   m_Name: GroundTile-01
   m_EditorClassIdentifier: 
-  objectName: Water
-  mainSprite: {fileID: -4110059370805265076, guid: b2f6e325811d724469afeb055ac0f511,
+  objectName: Wall1
+  mainSprite: {fileID: 3726809322130187659, guid: b2f6e325811d724469afeb055ac0f511,
     type: 3}
-  prefabGuid: 
+  prefabGuid: 2f03b948-b650-4886-8ca7-59e1e75232cd
   isCollider: 1
   isTrigger: 0

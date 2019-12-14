@@ -53,7 +53,7 @@ public class PrefabEditor : EditorWindow
         {
             style =
             {
-                width = _window.maxSize.x * 0.7f,
+                width = width * 0.7f,
                 paddingRight = 30
             }
         };
@@ -62,7 +62,7 @@ public class PrefabEditor : EditorWindow
             style =
             {
                 alignContent = Align.Center,
-                width = _window.maxSize.x * 0.3f
+                width = width * 0.3f
             }
         };
 
@@ -79,7 +79,7 @@ public class PrefabEditor : EditorWindow
         parentWindow = null;
     }
 
-    protected void addSlider(ref VisualElement dataRoot, int minVal, int maxVal, string label, string bindingPath)
+    protected SliderInt addSlider(ref VisualElement dataRoot, int minVal, int maxVal, string label, string bindingPath)
     {
         dataRoot.Add(new Spacer(30));
         var slider = new SliderInt(minVal, maxVal);
@@ -91,5 +91,6 @@ public class PrefabEditor : EditorWindow
         });
         slider.bindingPath = bindingPath;
         dataRoot.Add(slider);
+        return slider;
     }
 }

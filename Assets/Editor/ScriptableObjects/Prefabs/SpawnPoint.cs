@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class SpawnPoint : MapObject
 {
-    // Start is called before the first frame update
     public override Game.GameObject save()
     {
         Game.GameObject gameObject = new Game.GameObject();
-        gameObject.Components.Add(new Game.Transform());
-        gameObject.Components.Add(new Game.Sprite());
+        gameObject.Components.Add(new Game.SpawnPoint());
 
         gameObject.name = objectName;
 

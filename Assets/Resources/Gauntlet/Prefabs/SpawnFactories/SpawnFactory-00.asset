@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c3b560739749141ae7e585cd6bd4bc, type: 3}
   m_Name: SpawnFactory-00
   m_EditorClassIdentifier: 
-  objectName: Ghost
-  mainSprite: {fileID: -1217731857473686402, guid: 7517e44f6b86c21459f9e417ad6a314e,
+  objectName: SpawnFactory
+  mainSprite: {fileID: 6984513114953419391, guid: b2f6e325811d724469afeb055ac0f511,
     type: 3}
-  prefabGuid: b0b4a668-e04b-4585-aa47-e9bc2feb88a3
+  prefabGuid: 81053867-da5f-40df-8899-32ab9d48bccd
   health: 40
-  moveSpeed: 0
-  enemy: {fileID: 0}
+  timeInterval: 5
+  enemy: {fileID: 11400000, guid: fac2b39449c80504d8a8b65a2ffc4f6e, type: 2}
+  dropItem: {fileID: 11400000, guid: 6c48a27a8c158e04e892047b9a74e75e, type: 2}

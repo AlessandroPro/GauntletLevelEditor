@@ -9,13 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c60549d9b653164884c5c6c60aade84, type: 3}
-  m_Name: Player-00
+  m_Script: {fileID: 11500000, guid: 6b85824bd0caec74ca6f4ca77904f784, type: 3}
+  m_Name: Enemy-00
   m_EditorClassIdentifier: 
-  objectName: Player
-  mainSprite: {fileID: 6643711269398968355, guid: b2f6e325811d724469afeb055ac0f511,
+  objectName: Ghost
+  mainSprite: {fileID: 6983968517362155471, guid: 7517e44f6b86c21459f9e417ad6a314e,
     type: 3}
-  prefabGuid: 
-  health: 0
-  moveSpeed: 0
+  prefabGuid: 8050e201-5aeb-4208-932a-9b16d98b3676
+  health: 20
+  walkSpeed: 99
+  attackTimeInterval: 1
+  attackStyle: 1
   weapon: {fileID: 11400000, guid: 5524903a5c5c10e4ca65560a778b8852, type: 2}

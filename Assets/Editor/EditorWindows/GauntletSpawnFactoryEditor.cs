@@ -31,10 +31,8 @@ public class GauntletSpawnFactoryEditor : PrefabEditor
         dataRoot.Add(nameTextField);
 
         addSlider(ref dataRoot, 20, 100, "Health:   ", "health");
-        //dataRoot.Add(new Slider("Health:", 5, 100));
-        //dataRoot.Add(new Slider("Spawn Rate:", 1, 100));
-        //dataRoot.Add(new SliderInt("Pool Size", 0, 100));
-        //dataRoot.Add(new Slider("TimeInterval (s):", 0, 100));
+        addSlider(ref dataRoot, 1, 100, "TimeInterval (s):   ", "timeInterval");
+
 
         dataRoot.Add(new Spacer(30));
         dataRoot.Add(new Label("Enemy:"));
@@ -43,10 +41,18 @@ public class GauntletSpawnFactoryEditor : PrefabEditor
         enemyData.bindingPath = "enemy";
         dataRoot.Add(enemyData);
 
+        dataRoot.Add(new Spacer(30));
+        dataRoot.Add(new Label("Drop Item:"));
+        var itemData = new ObjectField();
+        itemData.objectType = typeof(Item);
+        itemData.bindingPath = "dropItem";
+        dataRoot.Add(itemData);
+
         // sprites
         Button newData = new Button(() =>
         {
             SpawnFactory newSpawnFactory = CreateInstance<SpawnFactory>();
+            newSpawnFactory.objectName = "SpawnFactory";
             var path = "Assets/Resources/Gauntlet/Prefabs/SpawnFactories";
             AssetDatabase.CreateAsset(newSpawnFactory, AssetDatabase.GenerateUniqueAssetPath(path + "/SpawnFactory-00.asset"));
             AssetDatabase.SaveAssets();
@@ -74,7 +80,7 @@ public class GauntletSpawnFactoryEditor : PrefabEditor
                     borderBottomWidth = 2,
                     marginTop = 10,
                     marginBottom = 20,
-                    marginLeft = 30,
+                    marginLeft = 10,
                     borderColor = Color.gray
 
                 },

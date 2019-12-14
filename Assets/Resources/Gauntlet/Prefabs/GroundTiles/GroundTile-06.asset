@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
   m_Name: GroundTile-06
   m_EditorClassIdentifier: 
-  objectName: MapObject
-  mainSprite: {fileID: 8905529747802331424, guid: b2f6e325811d724469afeb055ac0f511,
+  objectName: CornerTile
+  mainSprite: {fileID: 1881514222407102312, guid: b2f6e325811d724469afeb055ac0f511,
     type: 3}
-  prefabGuid: 
-  isCollider: 1
+  prefabGuid: 7a53e079-63e5-4ecd-a44e-a83f1934bee0
+  isCollider: 0
   isTrigger: 0

@@ -1,36 +1,25 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.ShortcutManagement;
 using UnityEditor.UIElements;
-using System;
 
-public enum ItemTypes
+public class GauntletSpawnPointEditor : PrefabEditor
 {
-    HealthBoost,
-    AttackBoost,
-    WalkSpeedBoost,
-    ThrowSpeedBoost,
-    Key
-}
-
-public class GauntletItemEditor : PrefabEditor
-{
-    public Item item;
+    public SpawnPoint spawnPoint;
     public void OnEnable()
     {
         setupWindow();
 
         // Data
-        dataRoot.Add(new Label("Choose a Item:"));
+        dataRoot.Add(new Label("Choose a SpawnPoint:"));
         objectData = new ObjectField();
-        objectData.objectType = typeof(Item);
+        objectData.objectType = typeof(SpawnPoint);
         dataRoot.Add(objectData);
 
-        objectData.RegisterCallback<ChangeEvent<UnityEngine.Object>>((evt) =>
+        objectData.RegisterCallback<ChangeEvent<Object>>((evt) =>
         {
             var change = (evt.target as ObjectField).value;
-            item = change as Item;
+            spawnPoint = change as SpawnPoint;
             UpdateBinding();
         });
 
@@ -40,37 +29,22 @@ public class GauntletItemEditor : PrefabEditor
         nameTextField.bindingPath = "objectName";
         dataRoot.Add(nameTextField);
 
-        dataRoot.Add(new Spacer(30));
-        dataRoot.Add(new Label("Item Type:"));
-        var itemTypeEnumField = new EnumField(ItemTypes.HealthBoost);
-        itemTypeEnumField.bindingPath = "itemType";
-        dataRoot.Add(itemTypeEnumField);
-
-        itemTypeEnumField.RegisterCallback<ChangeEvent<Enum>>((evt) =>
-        {
-            var change = evt.newValue;
-            if (item)
-            {
-                item.itemType = Convert.ToInt32(change);
-            }
-        });
-
         // sprites
         Button newData = new Button(() =>
         {
-            Item newItem = CreateInstance<Item>();
-            newItem.objectName = "Item";
-            var path = "Assets/Resources/Gauntlet/Prefabs/Items";
-            AssetDatabase.CreateAsset(newItem, AssetDatabase.GenerateUniqueAssetPath(path + "/Item-00.asset"));
+            SpawnPoint newSpawnPoint = CreateInstance<SpawnPoint>();
+            newSpawnPoint.objectName = "SpawnPoint";
+            var path = "Assets/Resources/Gauntlet/Prefabs/SpawnPoints";
+            AssetDatabase.CreateAsset(newSpawnPoint, AssetDatabase.GenerateUniqueAssetPath(path + "/SpawnPoint-00.asset"));
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            objectData.value = newItem;
+            objectData.value = newSpawnPoint;
             UpdateBinding();
         });
         newData.text = "New";
         spriteRoot.Add(newData);
         spriteRoot.Add(new Spacer(30));
-        spriteRoot.Add(new Label("Item Sprite:"));
+        spriteRoot.Add(new Label("SpawnPoint Sprite:"));
         objectTileSprite = new ObjectField();
         objectTileSprite.objectType = typeof(Sprite);
         objectTileSprite.bindingPath = "mainSprite";
@@ -94,7 +68,7 @@ public class GauntletItemEditor : PrefabEditor
             scaleMode = ScaleMode.ScaleToFit
         };
 
-        objectTileSprite.RegisterCallback<ChangeEvent<UnityEngine.Object>>((evt) =>
+        objectTileSprite.RegisterCallback<ChangeEvent<Object>>((evt) =>
         {
 
             var change = (evt.target as ObjectField).value;
@@ -110,7 +84,7 @@ public class GauntletItemEditor : PrefabEditor
 
             if (objectData.value)
             {
-                (objectData.value as Item).mainSprite = change as Sprite;
+                (objectData.value as SpawnPoint).mainSprite = change as Sprite;
             }
             Repaint();
             parentWindow.rebindPrefabListView();
@@ -121,10 +95,10 @@ public class GauntletItemEditor : PrefabEditor
 
     public void UpdateBinding()
     {
-        if (item != null)
+        if (spawnPoint != null)
         {
             // Create serialization object
-            SerializedObject so = new SerializedObject(item);
+            SerializedObject so = new SerializedObject(spawnPoint);
             // Bind it to the root of the hierarchy. 
             rootVisualElement.Bind(so);
 
@@ -136,4 +110,3 @@ public class GauntletItemEditor : PrefabEditor
         }
     }
 }
-

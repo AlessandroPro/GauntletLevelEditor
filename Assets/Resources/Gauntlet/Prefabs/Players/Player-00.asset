@@ -10,9 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c60549d9b653164884c5c6c60aade84, type: 3}
-  m_Name: Player-001
+  m_Name: Player-00
   m_EditorClassIdentifier: 
-  objectName: MapObject
-  mainSprite: {fileID: 9119227501592392301, guid: b2f6e325811d724469afeb055ac0f511,
+  objectName: Witch
+  mainSprite: {fileID: 6284571250894512191, guid: f9d916cc0d408074c9f710e2dc30b82c,
     type: 3}
-  prefabGuid: 
+  prefabGuid: daae4a28-1ab8-41c5-a9ec-dad80700933b
+  health: 100
+  walkSpeed: 60
+  maxLives: 3
+  weapon: {fileID: 11400000, guid: 5524903a5c5c10e4ca65560a778b8852, type: 2}

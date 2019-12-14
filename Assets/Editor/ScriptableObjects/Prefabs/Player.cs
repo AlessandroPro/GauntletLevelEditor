@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Player : MapObject
 {
-    public int health;
-    public int moveSpeed;
+    public int health = 20;
+    public int walkSpeed = 50;
+    public int maxLives = 1;
     public Projectile weapon;
     // Start is called before the first frame update
     public override Game.GameObject save()
@@ -16,6 +17,9 @@ public class Player : MapObject
         gameObject.Components.Add(new Game.RigidBody());
 
         Game.Player playerComp = new Game.Player();
+        playerComp.health = health;
+        playerComp.walkSpeed = walkSpeed;
+        playerComp.maxLives = maxLives;
         
         if(weapon != null)
         {

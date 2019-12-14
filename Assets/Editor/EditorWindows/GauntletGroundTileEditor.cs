@@ -61,6 +61,7 @@ public class GauntletGroundTileEditor : PrefabEditor
         Button newData = new Button(() =>
         {
             GroundTile tile = CreateInstance<GroundTile>();
+            tile.objectName = "GroundTile";
             var path = "Assets/Resources/Gauntlet/Prefabs/GroundTiles";
             AssetDatabase.CreateAsset(tile, AssetDatabase.GenerateUniqueAssetPath(path + "/GroundTile-00.asset"));
             AssetDatabase.SaveAssets();
@@ -88,7 +89,7 @@ public class GauntletGroundTileEditor : PrefabEditor
                     borderBottomWidth = 2,
                     marginTop = 10,
                     marginBottom = 20,
-                    marginLeft = 30,
+                    marginLeft = 10,
                     borderColor = Color.gray
 
                 },
@@ -134,13 +135,6 @@ public class GauntletGroundTileEditor : PrefabEditor
         {
             // Unbind the object from the actual visual element
             rootVisualElement.Unbind();
-            //objectTileSpriteImage.image = null;
-           // objectTileSprite.value = null;
-             //nameTextField.value = "";
-            //m_ObjectNameBinding.Unbind();
-
-            // Clear the TextField after the binding is removed
-            // m_ObjectNameBinding.value = "";
         }
     }
 }

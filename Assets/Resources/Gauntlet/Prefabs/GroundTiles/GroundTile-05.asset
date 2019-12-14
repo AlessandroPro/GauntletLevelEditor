@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
   m_Name: GroundTile-05
   m_EditorClassIdentifier: 
-  objectName: Column
-  mainSprite: {fileID: -2456403029347504819, guid: b2f6e325811d724469afeb055ac0f511,
+  objectName: FloorStone2
+  mainSprite: {fileID: 6119508627223213796, guid: b2f6e325811d724469afeb055ac0f511,
     type: 3}
-  prefabGuid: 
+  prefabGuid: 8c3d3b77-4bb9-4663-a1c2-a479aee8bb97
+  isCollider: 0
+  isTrigger: 0

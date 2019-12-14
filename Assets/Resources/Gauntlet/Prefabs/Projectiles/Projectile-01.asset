@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
-  m_Name: GroundTile-06
+  m_Script: {fileID: 11500000, guid: a00fd21ea9c65794c8ea6806668fca52, type: 3}
+  m_Name: Projectile-01
   m_EditorClassIdentifier: 
-  objectName: Pot
-  mainSprite: {fileID: 6104463937874508726, guid: b2f6e325811d724469afeb055ac0f511,
-    type: 3}
-  prefabGuid: 
+  objectName: Projectile
+  mainSprite: {fileID: 0}
+  prefabGuid: 5cebc2dd-dfec-4a35-9d26-b942f78d7143
+  damage: 20
+  throwSpeed: 50

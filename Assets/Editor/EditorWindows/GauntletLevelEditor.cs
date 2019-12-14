@@ -14,7 +14,8 @@ public enum MapPrefabTypes
     Item,
     SpawnFactory,
     SpawnPoint,
-    Portal
+    Portal,
+    Player
 }
 
 public enum MapLayers
@@ -51,9 +52,11 @@ public class GauntletLevelEditor : EditorWindow
 
     ObjectField gameData;
     ObjectField levelData;
+    ObjectField playerData;
     ListView levelListView;
     SliderInt levelSizeSlider;
     EnumField MapPrefabTypesField;
+
 
     static float width = 1000;
     static float height = 600;
@@ -130,6 +133,7 @@ public class GauntletLevelEditor : EditorWindow
                 var change = (evt.target as ObjectField).value;
                 game = change as GauntletGame;
                 levelData.value = null;
+                playerData.value = null;
                 rebindLevelListView();
             });
 
@@ -246,6 +250,21 @@ public class GauntletLevelEditor : EditorWindow
             levelButtonsRoot.Add(downButton);
             levelButtonsRoot.Add(removeButton);
             levelButtonsRoot.Add(editButton);
+
+
+            gameRoot.Add(new Label("Choose a Player for this Game:"));
+            playerData = new ObjectField();
+            playerData.objectType = typeof(Player);
+            gameRoot.Add(playerData);
+
+            playerData.RegisterCallback<ChangeEvent<UnityEngine.Object>>((evt) =>
+            {
+                var change = (evt.target as ObjectField).value;
+                if(game)
+                {
+                    game.playerObject = change as Player;
+                }
+            });
 
             // Level 
             gameRoot.Add(new Label("Choose a Level to edit:"));
@@ -409,7 +428,17 @@ public class GauntletLevelEditor : EditorWindow
                     }
                 case PrefabTypes.Item:
                     {
-                        //GauntletItemEditor.createWindow();
+                        assetWindow = PrefabEditor.createWindow<GauntletItemEditor>(_window, "Item Editor");
+                        break;
+                    }
+                case PrefabTypes.Portal:
+                    {
+                        assetWindow = PrefabEditor.createWindow<GauntletPortalEditor>(_window, " Portal Editor");
+                        break;
+                    }
+                case PrefabTypes.SpawnPoint:
+                    {
+                        assetWindow = PrefabEditor.createWindow<GauntletSpawnPointEditor>(_window, "Spawn Point Editor");
                         break;
                     }
                 default: break;
@@ -464,66 +493,6 @@ public class GauntletLevelEditor : EditorWindow
 
         levelListView.style.flexGrow = 1.0f;
         return levelListView;
-    }
-
-    public ListView createSpriteList()
-    {
-        Texture2D tex = new Texture2D(50, 50);
-        for (int y = 0; y < tex.height; y++)
-        {
-            for (int x = 0; x < tex.width; x++)
-            {
-                Color color = new Color(x / 255f, y / 255f, 0);
-                tex.SetPixel(x, y, color);
-            }
-        }
-        tex.Apply();
-
-        var mySprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-        // Create some list of data, here simply numbers in interval [1, 1000]
-        const int itemCount = 20;
-        var items = new List<Sprite>(itemCount);
-        for (int i = 1; i <= itemCount; i++)
-            items.Add(mySprite);
-
-        // The "makeItem" function will be called as needed
-        // when the ListView needs more items to render
-        Func<VisualElement> makeItem = () => new Image()
-        {
-            style =
-                {
-                    paddingTop = 10f,
-                    paddingBottom = 10f,
-                    paddingLeft = 10f,
-                    paddingRight = 10f,
-                },
-            scaleMode = ScaleMode.ScaleToFit
-            
-        };
-
-        Action<VisualElement, int> bindItem = (e, i) =>
-        {
-            (e as Image).image = items[i].texture;
-        };
-
-        // Provide the list view with an explict height for every row
-        // so it can calculate how many items to actually display
-        const int itemHeight = 70;
-
-        var listView = new ListView(items, itemHeight, makeItem, bindItem)
-        {
-            style =
-            {
-                backgroundColor = Color.gray
-            }
-        };
-
-        listView.selectionType = SelectionType.Single;
-
-
-        listView.style.flexGrow = 1f;
-
-        return listView;
     }
 
     public ListView createMapTileList()
@@ -625,12 +594,22 @@ public class GauntletLevelEditor : EditorWindow
                     }
                 case MapPrefabTypes.Item:
                     {
-                        objects = Resources.LoadAll<Player>("Gauntlet/Prefabs/Items"); ///CHANGE THIS TO <ITEM>
+                        objects = Resources.LoadAll<Item>("Gauntlet/Prefabs/Items"); 
                         break;
                     }
                 case MapPrefabTypes.SpawnFactory:
                     {
                         objects = Resources.LoadAll<SpawnFactory>("Gauntlet/Prefabs/SpawnFactories");
+                        break;
+                    }
+                case MapPrefabTypes.SpawnPoint:
+                    {
+                        objects = Resources.LoadAll<SpawnPoint>("Gauntlet/Prefabs/SpawnPoints");
+                        break;
+                    }
+                case MapPrefabTypes.Portal:
+                    {
+                        objects = Resources.LoadAll<Portal>("Gauntlet/Prefabs/Portals"); 
                         break;
                     }
                 default: break;

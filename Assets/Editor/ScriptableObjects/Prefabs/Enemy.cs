@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Enemy : MapObject
 {
-    public int health;
-    public int moveSpeed;
+    public int health = 20;
+    public int walkSpeed = 30;
+    public int attackTimeInterval = 1;
+    public int attackStyle = 0;
     public Projectile weapon;
+
     // Start is called before the first frame update
     public override Game.GameObject save()
     {
@@ -16,6 +19,10 @@ public class Enemy : MapObject
         gameObject.Components.Add(new Game.RigidBody());
 
         Game.Enemy enemyComp = new Game.Enemy();
+        enemyComp.health = health;
+        enemyComp.walkSpeed = walkSpeed;
+        enemyComp.attackTimeInterval = attackTimeInterval;
+        enemyComp.attackStyle = attackStyle;
 
         if (weapon != null)
         {

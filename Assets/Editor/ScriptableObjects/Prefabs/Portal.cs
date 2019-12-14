@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Portal : MapObject
 {
-    // Start is called before the first frame update
     public override Game.GameObject save()
     {
         Game.GameObject gameObject = new Game.GameObject();
-        gameObject.Components.Add(new Game.Transform());
-        gameObject.Components.Add(new Game.Sprite());
+        gameObject.Components.Add(new Game.Portal());
+        gameObject.Components.Add(new Game.CircleCollider(true));
 
         gameObject.name = objectName;
 

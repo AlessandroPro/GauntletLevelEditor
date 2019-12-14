@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27bc73960d96050459bd4c5418334f22, type: 3}
-  m_Name: GameData-01
+  m_Script: {fileID: 11500000, guid: 5687f7b9e47f205498297d890490dc8e, type: 3}
+  m_Name: Portal-00
   m_EditorClassIdentifier: 
-  levels: []
-  strings: []
+  objectName: Portal1
+  mainSprite: {fileID: 961504700816514905, guid: 7517e44f6b86c21459f9e417ad6a314e,
+    type: 3}
+  prefabGuid: b3136eb7-7dff-4148-ab46-6382f4b17bee

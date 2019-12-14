@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c5c104fc2fab024b8708fe61d360b4a, type: 3}
-  m_Name: GroundTile-07
+  m_Script: {fileID: 11500000, guid: 192ca6193f8b8534a843a891c1e967b4, type: 3}
+  m_Name: Item-00
   m_EditorClassIdentifier: 
   objectName: Key
   mainSprite: {fileID: -7385175419658825098, guid: b2f6e325811d724469afeb055ac0f511,
     type: 3}
-  prefabGuid: 
+  prefabGuid: 03bddcac-8f5d-4f53-9b41-ad048f981ba6
+  itemType: 4

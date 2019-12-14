@@ -53,7 +53,7 @@ public class GauntletLevel : ScriptableObject
         }
     }
 
-    public void saveLevel(string path, int levelIndex)
+    public void saveLevel(string path, int levelIndex, Player playerObject)
     {
         gamePrefabs = new Dictionary<string, MapObject>();
         gameTextures = new Dictionary<string, Texture>();
@@ -61,6 +61,14 @@ public class GauntletLevel : ScriptableObject
         Game.Level levelData = new Game.Level();
         levelData.TimeLimit = timeLimit;
 
+        // Save the player in the first level
+        if(levelIndex == 0 && playerObject != null)
+        {
+            Game.GameObject player = saveMapObject(playerObject, 1, 0, 0);
+            levelData.GameObjects.Add(player);
+        }
+
+        // Save all map tiles in each alyer
         for (int l = 0; l < numLayers; l++)
         {
             var layer = levelLayers[l];
@@ -95,8 +103,6 @@ public class GauntletLevel : ScriptableObject
         StreamWriter writer = new StreamWriter(path + "/Levels/level_" + levelIndex.ToString() + ".json");
         writer.Write(json);
         writer.Close();
-
-        
     }
 
     Game.GameObject saveMapObject(MapObject mapObject, int layer, int x, int y)

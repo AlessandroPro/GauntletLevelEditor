@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.ShortcutManagement;
 using UnityEditor.UIElements;
+using System;
 
 public enum AttackStyles
 {
@@ -25,7 +26,7 @@ public class GauntletEnemyEditor : PrefabEditor
         objectData.objectType = typeof(Enemy);
         dataRoot.Add(objectData);
 
-        objectData.RegisterCallback<ChangeEvent<Object>>((evt) =>
+        objectData.RegisterCallback<ChangeEvent<UnityEngine.Object>>((evt) =>
         {
             var change = (evt.target as ObjectField).value;
             enemy = change as Enemy;
@@ -39,7 +40,22 @@ public class GauntletEnemyEditor : PrefabEditor
         dataRoot.Add(nameTextField);
 
         addSlider(ref dataRoot, 20, 100, "Health:   ", "health");
-        addSlider(ref dataRoot, 5, 100, "Walk Speed:   ", "walkSpeed");
+        addSlider(ref dataRoot, 30, 500, "Walk Speed:   ", "walkSpeed");
+        addSlider(ref dataRoot, 1, 100, "Time Between Each Attack (s):   ", "attackTimeInterval");
+
+        dataRoot.Add(new Spacer(30));
+        dataRoot.Add(new Label("Attack Style:"));
+        var attackStyleEnumField = new EnumField(AttackStyles.RangeBased);
+        dataRoot.Add(attackStyleEnumField);
+
+        attackStyleEnumField.RegisterCallback<ChangeEvent<Enum>>((evt) =>
+        {
+            var change = evt.newValue;
+            if(enemy)
+            {
+                enemy.attackStyle = Convert.ToInt32(change);
+            }
+        });
 
         dataRoot.Add(new Spacer(30));
         dataRoot.Add(new Label("Weapon:"));
@@ -48,20 +64,11 @@ public class GauntletEnemyEditor : PrefabEditor
         weaponData.bindingPath = "weapon";
         dataRoot.Add(weaponData);
 
-
-        //dataRoot.Add(new Slider("Health:", 5, 100));
-        //        dataRoot.Add(new Slider("Walk Speed:", 1, 100));
-        //        dataRoot.Add(new EnumField(AttackStyles.Melee));
-        //        dataRoot.Add(new Label("Weapon:"));
-        //        dataRoot.Add(new Slider("Damage:", 0, 100));
-        //        dataRoot.Add(new Slider("Throw Speed:", 0, 100));
-        //        dataRoot.Add(new SliderInt("Pool Size", 0, 100));
-        //        dataRoot.Add(new Slider("TimeInterval (s):", 0, 100));
-
         // sprites
         Button newData = new Button(() =>
         {
             Enemy newEnemy = CreateInstance<Enemy>();
+            newEnemy.objectName = "Enemy";
             var path = "Assets/Resources/Gauntlet/Prefabs/Enemies";
             AssetDatabase.CreateAsset(newEnemy, AssetDatabase.GenerateUniqueAssetPath(path + "/Enemy-00.asset"));
             AssetDatabase.SaveAssets();
@@ -89,14 +96,14 @@ public class GauntletEnemyEditor : PrefabEditor
                     borderBottomWidth = 2,
                     marginTop = 10,
                     marginBottom = 20,
-                    marginLeft = 30,
+                    marginLeft = 10,
                     borderColor = Color.gray
 
                 },
             scaleMode = ScaleMode.ScaleToFit
         };
 
-        objectTileSprite.RegisterCallback<ChangeEvent<Object>>((evt) =>
+        objectTileSprite.RegisterCallback<ChangeEvent<UnityEngine.Object>>((evt) =>
         {
 
             var change = (evt.target as ObjectField).value;
@@ -135,13 +142,6 @@ public class GauntletEnemyEditor : PrefabEditor
         {
             // Unbind the object from the actual visual element
             rootVisualElement.Unbind();
-            //objectTileSpriteImage.image = null;
-            // objectTileSprite.value = null;
-            //nameTextField.value = "";
-            //m_ObjectNameBinding.Unbind();
-
-            // Clear the TextField after the binding is removed
-            // m_ObjectNameBinding.value = "";
         }
     }
 }

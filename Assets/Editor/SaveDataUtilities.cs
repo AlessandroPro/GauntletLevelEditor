@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+// Classes used to serialize data to json
 namespace Game
 {
     [Serializable]
@@ -11,6 +12,12 @@ namespace Game
         public List<string> resources = new List<string>();
         public List<Game.GameObject> GameObjects = new List<Game.GameObject>();
         public int TimeLimit = 0;
+    }
+
+    [Serializable]
+    public class LevelList
+    {
+        public List<string> levelFiles = new List<string>();
     }
 
     [Serializable]
@@ -108,6 +115,9 @@ namespace Game
     [Serializable]
     public class Player : Component
     {
+        public int health;
+        public int walkSpeed;
+        public int maxLives;
         public string weaponPrefabGUID;
         public Player()
         {
@@ -120,6 +130,11 @@ namespace Game
     public class Enemy : Component
     {
         public string weaponPrefabGUID;
+        public int health;
+        public int walkSpeed;
+        public int attackTimeInterval;
+        public int attackStyle;
+
         public Enemy()
         {
             type = "Enemy";
@@ -131,17 +146,23 @@ namespace Game
     [Serializable]
     public class SpawnFactory : Component
     {
+        public int health;
+        public int timeInterval;
         public string enemyPrefabGUID;
+        public string itemPrefabGUID;
         public SpawnFactory()
         {
             type = "SpawnFactory";
             enemyPrefabGUID = "";
+            itemPrefabGUID = "";
         }
     }
 
     [Serializable]
     public class Item : Component
     {
+        public int itemType;
+
         public Item()
         {
             type = "Item";
@@ -169,6 +190,9 @@ namespace Game
     [Serializable]
     public class Projectile : Component
     {
+        public int damage;
+        public int throwSpeed;
+
         public Projectile()
         {
             type = "Projectile";
