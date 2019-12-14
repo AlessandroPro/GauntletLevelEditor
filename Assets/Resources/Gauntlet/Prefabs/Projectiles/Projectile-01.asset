@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00fd21ea9c65794c8ea6806668fca52, type: 3}
   m_Name: Projectile-01
   m_EditorClassIdentifier: 
-  objectName: Projectile
-  mainSprite: {fileID: 0}
+  objectName: Bones
+  mainSprite: {fileID: 4654243933662768636, guid: b2f6e325811d724469afeb055ac0f511,
+    type: 3}
   prefabGuid: 5cebc2dd-dfec-4a35-9d26-b942f78d7143
   damage: 20
-  throwSpeed: 50
+  throwSpeed: 94
