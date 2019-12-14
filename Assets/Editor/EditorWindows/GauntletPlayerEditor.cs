@@ -32,8 +32,22 @@ public class GauntletPlayerEditor : PrefabEditor
         nameTextField.bindingPath = "objectName";
         dataRoot.Add(nameTextField);
 
-        //addSlider(ref dataRoot, 20, 100, "Health:   ", "health");
-        //addSlider(ref dataRoot, 5, 100, "Walk Speed:   ", "walkSpeed");
+        addSlider(ref dataRoot, 20, 100, "Health:   ", "health");
+        addSlider(ref dataRoot, 5, 100, "Walk Speed:   ", "walkSpeed");
+
+        dataRoot.Add(new Spacer(30));
+        dataRoot.Add(new Label("Weapon:"));
+        var weaponData = new ObjectField();
+        weaponData.objectType = typeof(Projectile);
+        weaponData.bindingPath = "weapon";
+        dataRoot.Add(weaponData);
+
+        weaponData.RegisterCallback<ChangeEvent<Object>>((evt) =>
+        {
+            var change = (evt.target as ObjectField).value;
+            player.weapon = change as Projectile;
+            UpdateBinding();
+        });
 
         //dataRoot.Add(new IntegerField("MaxLives:"));
         //        dataRoot.Add(new Label("Weapon:"));

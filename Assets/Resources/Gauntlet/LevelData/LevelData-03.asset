@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f477755eb95482439d4bac8e7df1182, type: 3}
   m_Name: LevelData-03
   m_EditorClassIdentifier: 
-  levelName: TestLevel
+  levelName: TestLevel1
   size: 20
   timeLimit: 60
   rowCount: 20
@@ -71,7 +71,7 @@ MonoBehaviour:
       - {fileID: 0}
       - {fileID: 0}
       - {fileID: 0}
-      - {fileID: 0}
+      - {fileID: 11400000, guid: d0dbcb4f990e9904d8431fb1fac74f9b, type: 2}
       - {fileID: 0}
       - {fileID: 0}
       - {fileID: 11400000, guid: 813938c62786003469619bcadaf14523, type: 2}

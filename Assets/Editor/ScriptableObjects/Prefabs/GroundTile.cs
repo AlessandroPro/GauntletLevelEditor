@@ -22,7 +22,6 @@ public class GroundTile : MapObject
     public override Game.GameObject save()
     {
         Game.GameObject gameObject = new Game.GameObject();
-
         Game.PolygonCollider pCol;
 
         if(isCollider)

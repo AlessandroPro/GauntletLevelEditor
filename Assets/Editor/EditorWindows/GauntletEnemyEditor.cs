@@ -11,130 +11,137 @@ public enum AttackStyles
     Melee
 }
 
-public class GauntletEnemyEditor : EditorWindow
+public class GauntletEnemyEditor : PrefabEditor
 {
-    static GauntletEnemyEditor _window = null;
-    static float width = 500;
-    static float height = 350;
-
-    //[MenuItem("Tools/GauntLet Enemy Editor")]
-    public static void createWindow()
-    {
-        if (_window != null) _window.Close();
-        _window = GetWindow<GauntletEnemyEditor>();
-        _window.titleContent = new GUIContent("Gauntlet Enemy Editor");
-        _window.maxSize = new Vector2(width, height);
-        _window.minSize = new Vector2(width, height);
-        _window.Repaint();
-    }
+    public Enemy enemy;
 
     public void OnEnable()
     {
-        VisualElement root = this.rootVisualElement;
-        root.style.flexDirection = FlexDirection.Row;
-        root.style.paddingTop = 10;
-        root.style.paddingBottom = 10;
-        root.style.paddingLeft = 10;
-        root.style.paddingRight = 10;
-
-
-
-        VisualElement dataRoot = new VisualElement()
-        {
-            style =
-            {
-                width = _window.maxSize.x * 0.7f,
-                paddingRight = 30
-            }
-        };
-        VisualElement spriteRoot = new VisualElement()
-        {
-            style =
-            {
-                alignContent = Align.Center,
-                width = _window.maxSize.x * 0.3f
-            }
-        };
-
-        root.Add(dataRoot);
-        root.Add(spriteRoot);
+        setupWindow();
 
         // Data
-        dataRoot.Add(new Label("Choose an Enemy:"));
-        ObjectField enemyData = new ObjectField();
-        dataRoot.Add(enemyData);
+        dataRoot.Add(new Label("Choose a Enemy:"));
+        objectData = new ObjectField();
+        objectData.objectType = typeof(Enemy);
+        dataRoot.Add(objectData);
 
-        dataRoot.Add(new TextField("Name:"));
-        dataRoot.Add(new Slider("Health:", 5, 100));
-        dataRoot.Add(new Slider("Walk Speed:", 1, 100));
-        dataRoot.Add(new EnumField(AttackStyles.Melee));
+        objectData.RegisterCallback<ChangeEvent<Object>>((evt) =>
+        {
+            var change = (evt.target as ObjectField).value;
+            enemy = change as Enemy;
+            UpdateBinding();
+        });
+
+        dataRoot.Add(new Spacer(30));
+        dataRoot.Add(new Label("Name:"));
+        nameTextField = new TextField();
+        nameTextField.bindingPath = "objectName";
+        dataRoot.Add(nameTextField);
+
+        addSlider(ref dataRoot, 20, 100, "Health:   ", "health");
+        addSlider(ref dataRoot, 5, 100, "Walk Speed:   ", "walkSpeed");
+
+        dataRoot.Add(new Spacer(30));
         dataRoot.Add(new Label("Weapon:"));
-        dataRoot.Add(new Slider("Damage:", 0, 100));
-        dataRoot.Add(new Slider("Throw Speed:", 0, 100));
-        dataRoot.Add(new SliderInt("Pool Size", 0, 100));
-        dataRoot.Add(new Slider("TimeInterval (s):", 0, 100));
+        var weaponData = new ObjectField();
+        weaponData.objectType = typeof(Projectile);
+        weaponData.bindingPath = "weapon";
+        dataRoot.Add(weaponData);
 
+
+        //dataRoot.Add(new Slider("Health:", 5, 100));
+        //        dataRoot.Add(new Slider("Walk Speed:", 1, 100));
+        //        dataRoot.Add(new EnumField(AttackStyles.Melee));
+        //        dataRoot.Add(new Label("Weapon:"));
+        //        dataRoot.Add(new Slider("Damage:", 0, 100));
+        //        dataRoot.Add(new Slider("Throw Speed:", 0, 100));
+        //        dataRoot.Add(new SliderInt("Pool Size", 0, 100));
+        //        dataRoot.Add(new Slider("TimeInterval (s):", 0, 100));
 
         // sprites
-        Button newData = new Button();
+        Button newData = new Button(() =>
+        {
+            Enemy newEnemy = CreateInstance<Enemy>();
+            var path = "Assets/Resources/Gauntlet/Prefabs/Enemies";
+            AssetDatabase.CreateAsset(newEnemy, AssetDatabase.GenerateUniqueAssetPath(path + "/Enemy-00.asset"));
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            objectData.value = newEnemy;
+            UpdateBinding();
+        });
         newData.text = "New";
         spriteRoot.Add(newData);
+        spriteRoot.Add(new Spacer(30));
         spriteRoot.Add(new Label("Enemy Sprite:"));
-        ObjectField enemySprite = new ObjectField();
-        enemySprite.objectType = typeof(Sprite);
-        spriteRoot.Add(enemySprite);
-        Image enemySpriteImage = new Image()
+        objectTileSprite = new ObjectField();
+        objectTileSprite.objectType = typeof(Sprite);
+        objectTileSprite.bindingPath = "mainSprite";
+        spriteRoot.Add(objectTileSprite);
+        objectTileSpriteImage = new Image()
         {
             style =
                 {
-                    width = 80,
-                    height = 80,
-                    paddingTop = 10f,
-                    paddingBottom = 10f,
-                    paddingLeft = 10f,
-                    paddingRight = 10f,
+                    width = 100,
+                    height = 100,
                     borderLeftWidth = 2,
                     borderRightWidth = 2,
                     borderTopWidth = 2,
                     borderBottomWidth = 2,
                     marginTop = 10,
                     marginBottom = 20,
-                    marginLeft = 25,
-                    marginRight = 25,
+                    marginLeft = 30,
                     borderColor = Color.gray
 
                 },
             scaleMode = ScaleMode.ScaleToFit
         };
-        spriteRoot.Add(enemySpriteImage);
 
-        spriteRoot.Add(new Label("Weapon Sprite:"));
-        ObjectField weaponSprite = new ObjectField();
-        weaponSprite.objectType = typeof(Sprite);
-        spriteRoot.Add(weaponSprite);
-        Image weaponSpriteImage = new Image()
+        objectTileSprite.RegisterCallback<ChangeEvent<Object>>((evt) =>
         {
-            style =
-                {
-                    width = 80,
-                    height = 80,
-                    paddingTop = 10f,
-                    paddingBottom = 10f,
-                    paddingLeft = 10f,
-                    paddingRight = 10f,
-                    borderLeftWidth = 2,
-                    borderRightWidth = 2,
-                    borderTopWidth = 2,
-                    borderBottomWidth = 2,
-                    marginTop = 10,
-                    marginBottom = 20,
-                    marginLeft = 25,
-                    marginRight = 25,
-                    borderColor = Color.gray
 
-                },
-            scaleMode = ScaleMode.ScaleToFit
-        };
-        spriteRoot.Add(weaponSpriteImage);
+            var change = (evt.target as ObjectField).value;
+            if (change)
+            {
+                var sprite = change as Sprite;
+                GauntletLevelEditor.rebindImageTexture(ref objectTileSpriteImage, sprite);
+            }
+            else
+            {
+                objectTileSpriteImage.image = null;
+            }
+
+            if (objectData.value)
+            {
+                (objectData.value as Enemy).mainSprite = change as Sprite;
+            }
+            Repaint();
+            parentWindow.rebindPrefabListView();
+        });
+
+        spriteRoot.Add(objectTileSpriteImage);
+    }
+
+    public void UpdateBinding()
+    {
+        if (enemy != null)
+        {
+            // Create serialization object
+            SerializedObject so = new SerializedObject(enemy);
+            // Bind it to the root of the hierarchy. 
+            rootVisualElement.Bind(so);
+
+        }
+        else
+        {
+            // Unbind the object from the actual visual element
+            rootVisualElement.Unbind();
+            //objectTileSpriteImage.image = null;
+            // objectTileSprite.value = null;
+            //nameTextField.value = "";
+            //m_ObjectNameBinding.Unbind();
+
+            // Clear the TextField after the binding is removed
+            // m_ObjectNameBinding.value = "";
+        }
     }
 }

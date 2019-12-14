@@ -149,25 +149,18 @@ public class GauntletLevelEditor : EditorWindow
 
             Button saveDataButton = new Button(() =>
             {
-                var path = EditorUtility.SaveFilePanel("Export Game Data", "", "levelData.json", "json");
-                
-                if(path == null)
+                if (game != null)
                 {
-                    return;
-                }
+                    var path = EditorUtility.OpenFolderPanel("Export Game Data", "", "");
 
-                if (path.Length != 0)
-                {
-                    var destinationPath = Path.GetDirectoryName(path);
-                    if (level != null)
+                    if (path == null)
                     {
-                        var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
-                        var json = JsonConvert.SerializeObject(level.saveLevel(), settings);
-                        //string json = JsonUtility.ToJson(level.saveLevel());
+                        return;
+                    }
 
-                        StreamWriter writer = new StreamWriter(path);
-                        writer.Write(json);
-                        writer.Close();
+                    if (path.Length != 0)
+                    {
+                        game.saveGameData(path);
                     }
                 }
             });
@@ -396,7 +389,7 @@ public class GauntletLevelEditor : EditorWindow
                     }
                 case PrefabTypes.Enemy:
                     {
-                        //GauntletEnemyEditor.createWindow();
+                        assetWindow = PrefabEditor.createWindow<GauntletEnemyEditor>(_window, "Enemy Editor");
                         break;
                     }
                 case PrefabTypes.GroundTile:
@@ -407,6 +400,11 @@ public class GauntletLevelEditor : EditorWindow
                 case PrefabTypes.SpawnFactory:
                     {
                         assetWindow = PrefabEditor.createWindow<GauntletSpawnFactoryEditor>(_window, "Spawn Factory Editor");
+                        break;
+                    }
+                case PrefabTypes.Projectile:
+                    {
+                        assetWindow = PrefabEditor.createWindow<GauntletProjectileEditor>(_window, "Projectile Editor");
                         break;
                     }
                 case PrefabTypes.Item:

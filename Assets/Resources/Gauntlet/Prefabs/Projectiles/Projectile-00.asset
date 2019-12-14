@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00fd21ea9c65794c8ea6806668fca52, type: 3}
+  m_Name: Projectile-00
+  m_EditorClassIdentifier: 
+  objectName: MapObject
+  mainSprite: {fileID: -8960004934634566726, guid: f9d916cc0d408074c9f710e2dc30b82c,
+    type: 3}
+  prefabGuid: da79961d-37ce-49e1-b5d9-101fef89a80d

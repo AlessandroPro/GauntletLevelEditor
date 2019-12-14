@@ -81,6 +81,11 @@ namespace Game
         {
             type = "CircleCollider";
         }
+
+        public CircleCollider(bool isTrigger) : this()
+        {
+            trigger = isTrigger;
+        }
     }
 
     [Serializable]
@@ -93,14 +98,80 @@ namespace Game
             type = "PolygonCollider";
             box = new Box();
         }
+
+        public PolygonCollider(bool isTrigger) : this()
+        { 
+            trigger = isTrigger;
+        }
     }
 
     [Serializable]
     public class Player : Component
     {
+        public string weaponPrefabGUID;
         public Player()
         {
             type = "Player";
+            weaponPrefabGUID = "";
+        }
+    }
+
+    [Serializable]
+    public class Enemy : Component
+    {
+        public string weaponPrefabGUID;
+        public Enemy()
+        {
+            type = "Enemy";
+            weaponPrefabGUID = "";
+        }
+    }
+
+
+    [Serializable]
+    public class SpawnFactory : Component
+    {
+        public string enemyPrefabGUID;
+        public SpawnFactory()
+        {
+            type = "SpawnFactory";
+            enemyPrefabGUID = "";
+        }
+    }
+
+    [Serializable]
+    public class Item : Component
+    {
+        public Item()
+        {
+            type = "Item";
+        }
+    }
+
+    [Serializable]
+    public class SpawnPoint : Component
+    {
+        public SpawnPoint()
+        {
+            type = "SpawnPoint";
+        }
+    }
+
+    [Serializable]
+    public class Portal : Component
+    {
+        public Portal()
+        {
+            type = "Portal";
+        }
+    }
+
+    [Serializable]
+    public class Projectile : Component
+    {
+        public Projectile()
+        {
+            type = "Projectile";
         }
     }
 
@@ -127,7 +198,7 @@ namespace Game
     [Serializable]
     public class Texture
     {
-        public string textureAssetGUID = "5651edc5-61a2-4e2d-8c52-fb04ca66564d";
+        public string textureAssetGUID = "";
     }
 
     [Serializable]
@@ -138,5 +209,14 @@ namespace Game
         public int Width = 64;
         public int Height = 64;
     }
+
+    [Serializable]
+    public class MetaData
+    {
+        public string type = "";
+        public string guid = "";
+        public string path = "";
+    }
 }
+
 

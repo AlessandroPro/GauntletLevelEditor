@@ -8,8 +8,12 @@ public class Projectile : MapObject
     public override Game.GameObject save()
     {
         Game.GameObject gameObject = new Game.GameObject();
-        gameObject.Components.Add(new Game.Transform());
-        gameObject.Components.Add(new Game.Sprite());
+        gameObject.Components.Add(new Game.Projectile());
+        gameObject.Components.Add(new Game.RigidBody());
+
+        Game.CircleCollider col = new Game.CircleCollider();
+        col.radius = 20.0f;
+        gameObject.Components.Add(col);
 
         gameObject.name = objectName;
 

@@ -5,7 +5,6 @@ using UnityEngine;
 public class GauntletGame : ScriptableObject
 {
     public List<GauntletLevel> levels = new List<GauntletLevel>();
-    public List<string> strings = new List<string>();
 
     // Move the level at levelIndex up/down the level list
     // The levels load in their index order
@@ -41,5 +40,17 @@ public class GauntletGame : ScriptableObject
         levels[levelIndex] = tempLevel;
 
         return moveIndex;
+    }
+
+    public void saveGameData(string destFolder)
+    {
+        GauntletLevel.savedAssets = new HashSet<string>();
+
+        int index = 0;
+        foreach(var level in levels)
+        {
+            level.saveLevel(destFolder, index);
+            index++;
+        }
     }
 }

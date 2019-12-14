@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c60549d9b653164884c5c6c60aade84, type: 3}
-  m_Name: Player-00
+  m_Script: {fileID: 11500000, guid: 41c3b560739749141ae7e585cd6bd4bc, type: 3}
+  m_Name: SpawnFactory-00
   m_EditorClassIdentifier: 
-  objectName: Player
-  mainSprite: {fileID: 6643711269398968355, guid: b2f6e325811d724469afeb055ac0f511,
+  objectName: Ghost
+  mainSprite: {fileID: -1217731857473686402, guid: 7517e44f6b86c21459f9e417ad6a314e,
     type: 3}
-  prefabGuid: 
-  health: 0
+  prefabGuid: b0b4a668-e04b-4585-aa47-e9bc2feb88a3
+  health: 40
   moveSpeed: 0
-  weapon: {fileID: 11400000, guid: 5524903a5c5c10e4ca65560a778b8852, type: 2}
+  enemy: {fileID: 0}
