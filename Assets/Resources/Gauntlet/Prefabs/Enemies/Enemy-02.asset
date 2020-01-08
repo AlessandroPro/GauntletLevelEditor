@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b85824bd0caec74ca6f4ca77904f784, type: 3}
+  m_Name: Enemy-02
+  m_EditorClassIdentifier: 
+  objectName: Bat
+  mainSprite: {fileID: 3715899403775863448, guid: 334ee41237da9fe4baeb2f6d61b67d78,
+    type: 3}
+  prefabGuid: 17b83746-20d2-4746-bede-f22d1ba3d455
+  health: 20
+  walkSpeed: 94
+  attackTimeInterval: 1
+  attackStyle: 2
+  weapon: {fileID: 11400000, guid: 302f90cf65903a948b0ee379b3f6e5ef, type: 2}

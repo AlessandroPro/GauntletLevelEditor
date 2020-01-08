@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c3b560739749141ae7e585cd6bd4bc, type: 3}
+  m_Name: SpawnFactory-01
+  m_EditorClassIdentifier: 
+  objectName: SkeletonFactory
+  mainSprite: {fileID: 6643711269398968355, guid: b2f6e325811d724469afeb055ac0f511,
+    type: 3}
+  prefabGuid: c7280e84-1a00-4c9e-a7f8-de1c32b6b7d8
+  health: 20
+  timeInterval: 7
+  enemy: {fileID: 11400000, guid: 72e2f90e1d22aee4993f8db68d9e8acf, type: 2}
+  dropItem: {fileID: 0}

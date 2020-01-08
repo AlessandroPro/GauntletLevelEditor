@@ -64,7 +64,7 @@ public class GauntletLevel : ScriptableObject
         // Save the player in the first level
         if(levelIndex == 0 && playerObject != null)
         {
-            Game.GameObject player = saveMapObject(playerObject, 1, 0, 0);
+            Game.GameObject player = saveMapObject(playerObject, 3, 0, 0);
             levelData.GameObjects.Add(player);
         }
 
@@ -202,7 +202,8 @@ public class GauntletLevel : ScriptableObject
         int prefabNum = 0;
         foreach(var prefab in gamePrefabs)
         {
-            string prefabFileName = "prefab" + prefabNum.ToString() + "_" + prefab.Value.objectName;
+            //string prefabFileName = "prefab" + prefabNum.ToString() + "_" + prefab.Value.objectName;
+            string prefabFileName = "prefab_" + prefab.Value.objectName;
 
             var prefabMeta = new Game.MetaData();
             prefabMeta.type = "PrefabAsset";
@@ -221,7 +222,7 @@ public class GauntletLevel : ScriptableObject
                 writer1.Close();
 
                 // Save the prefab file
-                Game.GameObject gameObject = saveMapObject(prefab.Value, 0, 0, 0);
+                Game.GameObject gameObject = saveMapObject(prefab.Value, 1, 0, 0);
                 var jsonPrefab = JsonConvert.SerializeObject(gameObject, settings);
                 StreamWriter writer2 = new StreamWriter(path + "/Prefabs/" + prefabFileName + ".prefab");
                 writer2.Write(jsonPrefab);

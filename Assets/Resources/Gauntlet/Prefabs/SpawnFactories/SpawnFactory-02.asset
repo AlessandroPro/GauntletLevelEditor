@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c3b560739749141ae7e585cd6bd4bc, type: 3}
+  m_Name: SpawnFactory-02
+  m_EditorClassIdentifier: 
+  objectName: BatFactory
+  mainSprite: {fileID: 6098089514873771090, guid: b2f6e325811d724469afeb055ac0f511,
+    type: 3}
+  prefabGuid: c0bd6c26-95f7-4c61-8bc1-5fcb396acd59
+  health: 20
+  timeInterval: 4
+  enemy: {fileID: 11400000, guid: e61f8b61be00b184c89e596993eed42d, type: 2}
+  dropItem: {fileID: 0}

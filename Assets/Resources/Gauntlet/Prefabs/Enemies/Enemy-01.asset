@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b85824bd0caec74ca6f4ca77904f784, type: 3}
+  m_Name: Enemy-01
+  m_EditorClassIdentifier: 
+  objectName: Skeleton
+  mainSprite: {fileID: 6331079080334612255, guid: 17688686374b9b34b9c5b5e948222a9d,
+    type: 3}
+  prefabGuid: 68e49b58-e23e-4212-86db-b5752ba13bd4
+  health: 20
+  walkSpeed: 35
+  attackTimeInterval: 4
+  attackStyle: 0
+  weapon: {fileID: 11400000, guid: e30d806934b59714ab4cb574ab652888, type: 2}

@@ -25,6 +25,13 @@ public class SpawnFactory : MapObject
             {
                 GauntletLevel.gamePrefabs.Add(enemy.prefabGuid, enemy);
             }
+            if (enemy.weapon != null)
+            {
+                if (!GauntletLevel.gamePrefabs.ContainsKey(enemy.weapon.prefabGuid))
+                {
+                    GauntletLevel.gamePrefabs.Add(enemy.weapon.prefabGuid, enemy.weapon);
+                }
+            }
         }
 
         if(dropItem != null)
