@@ -1,6 +1,10 @@
 Alessandro Profenna
 PROG56693 Project 2
 
+GitLab:
+https://gitlab.com/AlessandroPro/prog56693.project2.git
+
+
 This tool can actually be used to make working maps for the Gauntlet Game.
 
 Go to Tools -> Gauntlet Level Editor to launch the editor.

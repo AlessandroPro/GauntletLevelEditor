@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00fd21ea9c65794c8ea6806668fca52, type: 3}
+  m_Name: Projectile-03
+  m_EditorClassIdentifier: 
+  objectName: Bones
+  mainSprite: {fileID: 4654243933662768636, guid: b2f6e325811d724469afeb055ac0f511,
+    type: 3}
+  prefabGuid: b20cda56-4123-4ed8-a24b-f7c7c6f71e70
+  damage: 5
+  throwSpeed: 164

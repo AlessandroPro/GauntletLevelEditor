@@ -15,3 +15,6 @@ MonoBehaviour:
   levels:
   - {fileID: 11400000, guid: 1aef294553361474390d833bab7c1fe0, type: 2}
   - {fileID: 11400000, guid: 6d1ffdfdcb3a2504b888c0a74bca358e, type: 2}
+  - {fileID: 11400000, guid: b3ca1ef0507d683469130aeca24428d3, type: 2}
+  - {fileID: 11400000, guid: c2cc8935ced7b01489217219478815a1, type: 2}
+  playerObject: {fileID: 11400000, guid: fb6e45c1baa6cb747a3d6f3b33e51a0a, type: 2}

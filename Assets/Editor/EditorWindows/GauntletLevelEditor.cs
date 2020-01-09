@@ -14,8 +14,7 @@ public enum MapPrefabTypes
     Item,
     SpawnFactory,
     SpawnPoint,
-    Portal,
-    Player
+    Portal
 }
 
 public enum MapLayers

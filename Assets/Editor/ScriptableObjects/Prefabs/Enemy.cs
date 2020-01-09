@@ -27,10 +27,6 @@ public class Enemy : MapObject
         if (weapon != null)
         {
             enemyComp.weaponPrefabGUID = weapon.prefabGuid;
-            if (!GauntletLevel.gamePrefabs.ContainsKey(weapon.prefabGuid))
-            {
-                GauntletLevel.gamePrefabs.Add(weapon.prefabGuid, weapon);
-            }
         }
         gameObject.Components.Add(enemyComp);
 

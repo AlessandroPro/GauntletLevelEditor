@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00fd21ea9c65794c8ea6806668fca52, type: 3}
+  m_Name: Projectile-04
+  m_EditorClassIdentifier: 
+  objectName: Poison
+  mainSprite: {fileID: 21300000, guid: 86a76395ec8a7a542a14d68276c6a219, type: 3}
+  prefabGuid: 5beefb46-7001-4d56-a159-19bd5a9ba6f0
+  damage: 1
+  throwSpeed: 50
