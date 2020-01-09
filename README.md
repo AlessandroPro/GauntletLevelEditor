@@ -52,4 +52,10 @@ Assets/Resources/Gauntlet/Prefabs -> scriptable objects for each prefab that can
 
 If there are any questions, just ask :)
 
+![Screenshot1](https://user-images.githubusercontent.com/15040875/72028892-33716d00-3252-11ea-9042-3162c9b3872c.PNG)
+
+![Screenshot2](https://user-images.githubusercontent.com/15040875/72029286-6f590200-3253-11ea-8264-a0d70dbf5e4c.PNG)
+
+![Screenshot3](https://user-images.githubusercontent.com/15040875/72029299-7aac2d80-3253-11ea-8145-10142def5d8a.PNG)
+
 Thanks!
