@@ -1,8 +1,6 @@
-Alessandro Profenna
-PROG56693 Project 2
+# Gauntlet Level Editor
 
-GitLab:
-https://gitlab.com/AlessandroPro/prog56693.project2.git
+Imported from GitLab.
 
 
 This tool can actually be used to make working maps for the Gauntlet Game.
@@ -50,7 +48,6 @@ Assets/Resources/Gauntlet/GameData -> scriptable objects for each game
 Assets/Resources/Gauntlet/LevelData -> scriptable objects for each level
 Assets/Resources/Gauntlet/Prefabs -> scriptable objects for each prefab that can be drawn on the map
 
-If there are any questions, just ask :)
 
 ![Screenshot1](https://user-images.githubusercontent.com/15040875/72028892-33716d00-3252-11ea-9042-3162c9b3872c.PNG)
 
@@ -58,4 +55,4 @@ If there are any questions, just ask :)
 
 ![Screenshot3](https://user-images.githubusercontent.com/15040875/72029299-7aac2d80-3253-11ea-8145-10142def5d8a.PNG)
 
-Thanks!
+
