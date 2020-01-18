@@ -6,7 +6,7 @@ All relevant C# code is in /Assets/Editor/.
 This is a C# Unity Editor Tool used for designing, drawing, and exporting 2D level maps based on the classic Gauntlet video game: <br>
 https://www.youtube.com/watch?v=7mMJio2MO6w 
 
-This tool includes windows for creating and designing prefabs (enemies, spawn factories, items, ground tiles, etc.) and a map editor window for designing levels through the placement of these prefabs. With the click of a button, all maps will be bundled together and exported (including all sprite assets and object data in the form of json files), to be easily loaded into a separately written C++ Gauntlet game. <br>
+This tool includes windows for creating and designing prefabs (enemies, spawn factories, items, ground tiles, etc.) and a map editor window for designing levels through the placement of these prefabs. With the click of a button, all maps will be bundled together and exported (including all sprite assets and object data in the form of json files). This data can then be easily loaded into a separately written C++ Gauntlet game, outside of Unity. <br>
 Map and prefab data is managed internally through scriptable objects that are saved within the Unity project, in case you want to close Unity and open it again to continue working another time.
 This repo already contains a few maps and prefabs already created, saved under Assets/Resources/Gauntlet/.
 
